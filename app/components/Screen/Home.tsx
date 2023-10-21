@@ -4,13 +4,19 @@ import Image from "next/image";
 import Button from "../Button";
 import Lottie from "lottie-react";
 import * as animation from "../../../public/lottie/animation.json";
+import { twMerge } from "tailwind-merge";
 
 interface IHomeScreenProps {}
 
 const HomeScreen: React.FC<IHomeScreenProps> = (props) => {
   return (
-    <div className="bg-gradient-to-b from-white to-nyanza h-screen">
-      <div className="smart-edu-block">
+    <div className="">
+      <div
+        className={twMerge(
+          "smart-edu-block flex flex-col justify-between",
+          "!pt-0 h-full"
+        )}
+      >
         <div className="px-5 flex gap-5">
           <div className="flex flex-col gap-8 justify-center">
             <div>
@@ -22,10 +28,18 @@ const HomeScreen: React.FC<IHomeScreenProps> = (props) => {
               </h3>
             </div>
             <div className="flex flex-col gap-4">
-              <Button className="w-full" type="primary">
+              <Button
+                href="/register"
+                className="w-full hover:bg-primary-hover-gradient transition-all duration-300"
+                type="primary"
+              >
                 Bắt đầu ngay
               </Button>
-              <Button href="/login" className="w-full" type="secondary">
+              <Button
+                href="/login"
+                className="w-full hover:bg-primary-gradient bg-clip-text hover:text-transparent"
+                type="secondary"
+              >
                 Đã có tài khoản
               </Button>
             </div>
@@ -42,6 +56,45 @@ const HomeScreen: React.FC<IHomeScreenProps> = (props) => {
               height={450}
               src={"/lottie/hero-banner.lottie"}
             /> */}
+          </div>
+        </div>
+        <div className="flex mt-auto gap-8 justify-center items-center">
+          <div>Được đăng tin bởi</div>
+          <div>
+            <Image
+              src={"/images/zing-news.png"}
+              alt="zing new"
+              className="h-[24px] w-auto object-contain"
+              width={200}
+              height={24}
+            />
+          </div>
+          <div>
+            <Image
+              src={"/images/vtv.png"}
+              alt="zing new"
+              className="h-[24px] w-auto object-contain"
+              width={200}
+              height={60}
+            />
+          </div>
+          <div>
+            <Image
+              src={"/images/thanh-nien.png"}
+              alt="zing new"
+              className="h-[24px] w-auto object-contain"
+              width={200}
+              height={60}
+            />
+          </div>
+          <div>
+            <Image
+              src={"/images/kenh-14.png"}
+              alt="zing new"
+              className="h-[24px] w-auto object-contain"
+              width={200}
+              height={60}
+            />
           </div>
         </div>
       </div>

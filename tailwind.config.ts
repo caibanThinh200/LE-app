@@ -15,9 +15,11 @@ const config: Config = {
         "gradient-green":
           "linear-gradient(352deg, #54AB72 5.5%, #4E9447 93.38%)",
         "primary-gradient": "linear-gradient(180deg, #2AB032 0%, #29CC7E 100%)",
+        "primary-hover-gradient": "linear-gradient(180deg, #129625 0%, #0B6D38 100%)"
       },
       colors: {
         "bright-gray": "#E5E7EB",
+        "ghost-white": "#F9FAFB",
         plantinum: "#E1E3E7",
         "anti-flash-white": "#F3F4F6",
         "azureish-white": "#DCF3E7",
@@ -28,6 +30,8 @@ const config: Config = {
         charcoal: "#374151",
         "dark-jungle-green": "#0F172A",
         "blue-berry": "#3F83F8",
+        linen: "#FDECEB",
+        "carmine-pink": "#F04438"
       },
     },
   },

@@ -2,6 +2,7 @@ import "./style/style.scss";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Header from "./components/Header";
+import { twMerge } from "tailwind-merge";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,10 +17,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html className="h-full" lang="en">
+      <body className={twMerge(inter.className, "h-full bg-gradient-to-b from-white to-nyanza")}>
         <Header />
-        <div className="min-h-[550px]">{children}</div>
+        {children}
       </body>
     </html>
   );
