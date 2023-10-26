@@ -10,14 +10,14 @@ interface IHomeScreenProps {}
 
 const HomeScreen: React.FC<IHomeScreenProps> = (props) => {
   return (
-    <div className="">
+    <div className="h-[90%]">
       <div
         className={twMerge(
           "smart-edu-block flex flex-col justify-between",
           "!pt-0 h-full"
         )}
       >
-        <div className="px-5 flex gap-5">
+        <div className="px-5 flex gap-5 justify-center">
           <div className="flex flex-col gap-8 justify-center">
             <div>
               <h2 className="bg-clip-text text-transparent bg-primary-gradient font-bold leading-[72px]">
