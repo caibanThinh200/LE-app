@@ -6,6 +6,7 @@ const PrimaryButton: React.FC<IButtonProps> = (props) => {
     <button
       //   {...props}
       onClick={props.onClick}
+      style={props.style}
       className={twMerge(
         "py-3 px-8 bg-primary-gradient font-bold rounded-full text-white primary-gradient",
         props.className

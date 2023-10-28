@@ -18,6 +18,7 @@ const config: Config = {
         "primary-hover-gradient": "linear-gradient(180deg, #129625 0%, #0B6D38 100%)"
       },
       colors: {
+        "light-silver": '#D1D5DB',
         "bright-gray": "#E5E7EB",
         "ghost-white": "#F9FAFB",
         plantinum: "#E1E3E7",
