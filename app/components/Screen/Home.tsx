@@ -14,7 +14,7 @@ const HomeScreen: React.FC<IHomeScreenProps> = (props) => {
       <div
         className={twMerge(
           "smart-edu-block flex flex-col justify-between",
-          "!pt-0 h-full"
+          "!pt-0 h-full min-h-[85vh]"
         )}
       >
         <div className="px-5 flex gap-5 justify-center">
