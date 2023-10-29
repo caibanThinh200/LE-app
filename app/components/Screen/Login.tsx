@@ -6,6 +6,7 @@ import Input from "../Input";
 import { useForm } from "react-hook-form";
 import { useCallback } from "react";
 import { twMerge } from "tailwind-merge";
+import { useRouter } from "next/navigation";
 
 interface ILoginScreenProps {}
 
@@ -16,9 +17,11 @@ const LoginScreen: React.FC<ILoginScreenProps> = (props) => {
     watch,
     formState: { errors },
   } = useForm();
+  const router = useRouter();
 
-  const formSubmit = useCallback(() => {}, []);
-  console.log(errors);
+  const formSubmit = useCallback(() => {
+    router.push("/home");
+  }, [router]);
   return (
     <div>
       <div className="smart-edu-block">
@@ -58,16 +61,39 @@ const LoginScreen: React.FC<ILoginScreenProps> = (props) => {
                 })}
               /> */}
               {errors["phone_or_username"]?.message && (
-                <p className="mt-2 text-carmine-pink">{errors["phone_or_username"]?.message as string}</p>
+                <p className="mt-2 text-carmine-pink">
+                  {errors["phone_or_username"]?.message as string}
+                </p>
               )}
             </div>
             <div className="flex flex-col gap-2">
               <label className="text-independence">Mật khẩu</label>
-              <Input
+              {/* <Input
                 type="password"
                 placeholder="Nhập mật khẩu"
                 name="phone_or_username"
+              /> */}
+              <input
+                className={twMerge(
+                  "py-2.5 px-4 border-2 rounded-full w-full border-plantinum outline-none",
+                  errors["phone_or_username"] && "border-carmine-pink bg-linen"
+                )}
+                // error={
+                //   errors["phone_or_username"] && {
+                //     type: "required",
+                //     message: errors["phone_or_username"]?.message as string,
+                //   }
+                // }
+                placeholder="Nhập mật khẩu"
+                {...register("password", {
+                  required: "Vui lòng nhập mật khẩu",
+                })}
               />
+              {errors["password"]?.message && (
+                <p className="mt-2 text-carmine-pink">
+                  {errors["password"]?.message as string}
+                </p>
+              )}
             </div>
             <div>
               <Button className="w-full" type="primary">

@@ -10,6 +10,7 @@ import React, {
   useCallback,
   useState,
 } from "react";
+import { useRouter } from "next/navigation";
 
 interface IRegisterstepTwoProps {
   userInfo: any;
@@ -19,21 +20,16 @@ interface IRegisterstepTwoProps {
 
 const StepTwo: React.FC<IRegisterstepTwoProps> = (props) => {
   const [name, setName] = useState<string>("");
+  const router = useRouter();
 
-  const handleInput = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setName(e.target.value);
-      return props.onUpdate({ name: e.target.value });
+  const handleSelectClass = useCallback(
+    (e: React.MouseEvent) => {
+      // setName(e.target.value);
+      router.push("/login");
+      // return props.onUpdate({ class: "" });
     },
     [props]
   );
-
-  const handleSubmit = useCallback(() => {
-    if (!name) {
-      return;
-    }
-    props.setCurrentStep(1);
-  }, [name, props]);
 
   return (
     <div className="smart-edu-block h-[80%]">
@@ -46,6 +42,7 @@ const StepTwo: React.FC<IRegisterstepTwoProps> = (props) => {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <Button
+              onClick={handleSelectClass}
               className="hover:text-primary-green w-full bg-ghost-white text-independence drop-shadow-md rounded-xl"
               type="primary"
             >
@@ -54,6 +51,7 @@ const StepTwo: React.FC<IRegisterstepTwoProps> = (props) => {
           </div>
           <div>
             <Button
+              onClick={handleSelectClass}
               className="hover:text-primary-green w-full bg-ghost-white text-independence drop-shadow-md rounded-xl"
               type="primary"
             >
@@ -62,6 +60,7 @@ const StepTwo: React.FC<IRegisterstepTwoProps> = (props) => {
           </div>
           <div>
             <Button
+              onClick={handleSelectClass}
               className="hover:text-primary-green w-full bg-ghost-white text-independence drop-shadow-md rounded-xl"
               type="primary"
             >
@@ -70,6 +69,7 @@ const StepTwo: React.FC<IRegisterstepTwoProps> = (props) => {
           </div>
           <div>
             <Button
+              onClick={handleSelectClass}
               className="hover:text-primary-green w-full bg-ghost-white text-independence drop-shadow-md rounded-xl"
               type="primary"
             >
