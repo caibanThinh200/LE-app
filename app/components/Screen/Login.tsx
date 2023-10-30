@@ -14,7 +14,6 @@ const LoginScreen: React.FC<ILoginScreenProps> = (props) => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
   const router = useRouter();
@@ -22,6 +21,7 @@ const LoginScreen: React.FC<ILoginScreenProps> = (props) => {
   const formSubmit = useCallback(() => {
     router.push("/home");
   }, [router]);
+
   return (
     <div>
       <div className="smart-edu-block">

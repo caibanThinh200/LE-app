@@ -25,10 +25,10 @@ const StepTwo: React.FC<IRegisterstepTwoProps> = (props) => {
   const handleSelectClass = useCallback(
     (e: React.MouseEvent) => {
       // setName(e.target.value);
-      router.push("/login");
+      router.push("/home");
       // return props.onUpdate({ class: "" });
     },
-    [props]
+    [router]
   );
 
   return (
