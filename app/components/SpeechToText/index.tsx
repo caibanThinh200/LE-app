@@ -37,7 +37,7 @@ interface WordResult {
 const SPEECH_KEY = "afc6b1de18844a51a7e0bb13d06a26a7";
 const SPEECH_REGION = "eastus";
 
-export function SpeechToTextComponent() {
+export function SpeechToTextComponent(props: any) {
   const [isListening, setIsListening] = useState(false);
   const speechConfig = useRef<sdk.SpeechConfig>();
   const audioConfig = useRef<sdk.AudioConfig>();
@@ -50,8 +50,7 @@ export function SpeechToTextComponent() {
     fluency: 0,
   });
   const [wordDetail, setWordDetail] = useState<Array<WordResult>>([]);
-  const [myTranscript, setMyTranscript] = useState("");
-  const [recognizingTranscript, setRecTranscript] = useState("");
+  const [hasResult, setHasResult] = useState(false);
 
   useEffect(() => {
     (speechConfig.current as sdk.SpeechConfig) =
@@ -89,6 +88,7 @@ export function SpeechToTextComponent() {
         fluency: pronunciation_result.fluencyScore,
       });
       setWordDetail(pronunciation_result.detailResult.Words);
+      setHasResult(true);
       (recognizer.current as sdk.SpeechRecognizer).close();
     }
 
@@ -107,7 +107,7 @@ export function SpeechToTextComponent() {
         // console.log("Transcript: -->", transcript);
         // Call a function to process the transcript as needed
 
-        setRecTranscript(transcript);
+        // setRecTranscript(transcript);
       }
     };
 
@@ -175,7 +175,7 @@ export function SpeechToTextComponent() {
     console.log(point < 60);
     let colorClass = "";
     switch (true) {
-      case (point <= 100 && point >= 80): {
+      case point <= 100 && point >= 80: {
         colorClass = "text-primary-green";
         break;
       }
@@ -256,7 +256,7 @@ export function SpeechToTextComponent() {
   };
 
   return (
-    <div className="min-h-[300px] smart-edu-block">
+    <div className="min-h-[300px] smart-edu-block bg-white animate-[fadeIn_0.5s_ease-in-out] relative">
       <p className="mb-10">
         <b>Paragraph:</b> What's the weather like today ?
       </p>
@@ -266,7 +266,8 @@ export function SpeechToTextComponent() {
       >
         Start Recording
       </button>
-      <button onClick={stopListening}>Stop Recording</button>
+      {hasResult && <button onClick={props.onContinue}>Continue video</button>}
+      {/* <button onClick={stopListening}>Stop Recording</button> */}
       <div className="mt-10 grid grid-cols-4">
         <div className="flex flex-col gap-10 items-center">
           <h3>Accuracy</h3>

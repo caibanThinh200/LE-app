@@ -8,6 +8,15 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      animation: {
+        fadeIn: "fadeIn 1s ease-in-out forward",
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0", bottom: "50" },
+          "100%": { opacity: "1", bottom: "2.5rem" },
+        },
+      },
       container: {
         padding: "3rem",
       },
@@ -15,10 +24,11 @@ const config: Config = {
         "gradient-green":
           "linear-gradient(352deg, #54AB72 5.5%, #4E9447 93.38%)",
         "primary-gradient": "linear-gradient(180deg, #2AB032 0%, #29CC7E 100%)",
-        "primary-hover-gradient": "linear-gradient(180deg, #129625 0%, #0B6D38 100%)"
+        "primary-hover-gradient":
+          "linear-gradient(180deg, #129625 0%, #0B6D38 100%)",
       },
       colors: {
-        "light-silver": '#D1D5DB',
+        "light-silver": "#D1D5DB",
         "bright-gray": "#E5E7EB",
         "ghost-white": "#F9FAFB",
         plantinum: "#E1E3E7",
@@ -32,7 +42,7 @@ const config: Config = {
         "dark-jungle-green": "#0F172A",
         "blue-berry": "#3F83F8",
         linen: "#FDECEB",
-        "carmine-pink": "#F04438"
+        "carmine-pink": "#F04438",
       },
     },
   },
