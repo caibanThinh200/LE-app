@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const onBoardSlug = ["/", "/login", "/register"];
+const onBoardSlug = ["/", "/login", "/register", "/assessment"];
 
 export default function RootLayout({
   children,
