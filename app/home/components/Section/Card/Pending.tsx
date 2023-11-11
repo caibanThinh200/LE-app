@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ILessonCardProps } from ".";
+import Link from "next/link";
 
 const Pending: React.FC<ILessonCardProps> = (props) => {
   return (
@@ -34,9 +35,9 @@ const Pending: React.FC<ILessonCardProps> = (props) => {
             </div>
           </div>
           <div>
-            <button className="border border-primary-green rounded-full py-2 px-6 font-bold text-independence bg-white">
+            <Link href={"/lesson/123"} className="border border-primary-green rounded-full py-2 px-6 font-bold text-independence bg-white">
               Tiếp tục
-            </button>
+            </Link>
           </div>
         </div>
         <div className="flex-1 flex justify-center items-center">

@@ -13,7 +13,6 @@ import _ from "lodash";
 import { Doughnut } from "react-chartjs-2";
 import { Chart, ArcElement } from "chart.js";
 import { twMerge } from "tailwind-merge";
-Chart.register(ArcElement);
 
 interface WordResult {
   Word: string;
@@ -172,7 +171,6 @@ export function SpeechToTextComponent(props: any) {
   };
 
   const getColorByPoint = useCallback((point: number) => {
-    console.log(point < 60);
     let colorClass = "";
     switch (true) {
       case point <= 100 && point >= 80: {

@@ -42,6 +42,16 @@ const sections: Array<SectionCard> = [
     status: "pending",
     image: "/images/saly-18.png",
   },
+  {
+    title: "Trò chơi con cá",
+    status: "pending",
+    image: "/images/saly-18.png",
+  },
+  {
+    title: "Trò chơi con cá",
+    status: "pending",
+    image: "/images/saly-18.png",
+  },
 ];
 
 const Section: React.FC<ISectionProps> = (props) => {

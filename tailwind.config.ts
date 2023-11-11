@@ -23,6 +23,7 @@ const config: Config = {
       backgroundImage: {
         "gradient-green":
           "linear-gradient(352deg, #54AB72 5.5%, #4E9447 93.38%)",
+        "gradient-green-2": "linear-gradient(180deg, #2AB032 0%, #109C59 100%)",
         "primary-gradient": "linear-gradient(180deg, #2AB032 0%, #29CC7E 100%)",
         "primary-hover-gradient":
           "linear-gradient(180deg, #129625 0%, #0B6D38 100%)",

@@ -6,6 +6,8 @@ import { Inter } from "next/font/google";
 import Header from "./components/Header";
 import { twMerge } from "tailwind-merge";
 import { usePathname } from "next/navigation";
+import { Chart, ArcElement } from "chart.js";
+Chart.register(ArcElement);
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,9 +22,9 @@ export default function RootLayout({
 
   return (
     <html className="h-fit min-h-screen" lang="en">
-        <head>
-            <title>Gia sư tài năng</title>
-        </head>
+      <head>
+        <title>Gia sư tài năng</title>
+      </head>
       <body
         className={twMerge(
           inter.className,

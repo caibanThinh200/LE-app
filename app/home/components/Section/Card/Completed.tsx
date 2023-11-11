@@ -1,5 +1,8 @@
+'use client'
+
 import Image from "next/image";
 import { ILessonCardProps } from ".";
+import Link from "next/link";
 
 const Completed: React.FC<ILessonCardProps> = (props) => {
   return (
@@ -32,9 +35,9 @@ const Completed: React.FC<ILessonCardProps> = (props) => {
             </p>
           </div>
           <div>
-            <button className="border border-primary-green rounded-full py-2 px-6 font-bold text-independence">
+            <Link href={"/lesson/123"} className="border border-primary-green rounded-full py-2 px-6 font-bold text-independence">
               Chơi lại
-            </button>
+            </Link>
           </div>
         </div>
         <div className="flex-1 flex justify-center items-center">
