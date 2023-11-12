@@ -23,7 +23,7 @@ const RightBar: React.FC<IRightBarProps> = (props) => {
   );
 
   const RightBarComponent = useMemo(
-    () => rightBars[pathname],
+    () => rightBars[pathname] || LessonRightBar,
     [pathname, rightBars]
   );
 
