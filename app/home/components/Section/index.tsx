@@ -68,7 +68,7 @@ const Section: React.FC<ISectionProps> = (props) => {
           Chủ đề 1: <span className="font-bold">Giới thiệu và làm quen</span>
         </p>
       </div>
-      <div className="grid grid-cols-2 gap-6  overflow-auto">
+      <div className="grid grid-cols-2 gap-6  overflow-auto scroll-hover">
         {sections.map((section, index) => (
           <LessonCard index={index} section={section} key={index} />
         ))}

@@ -66,7 +66,7 @@ const RightBar: React.FC<IRightBarProps> = (props) => {
         style={{
           background: "rgba(249, 250, 251, 0.60)",
         }}
-        className="flex-2 p-4 rounded-xl h-full overflow-auto"
+        className="flex-2 p-4 rounded-xl h-full overflow-auto scroll-hover"
       >
         <p className="text-[20px] font-bold">Lịch sử điểm</p>
         <div className="rounded-xl bg-anti-flash-white p-4 border border-light-silver mt-4 flex gap-6 flex-col">

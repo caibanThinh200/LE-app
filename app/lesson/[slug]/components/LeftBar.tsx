@@ -9,7 +9,7 @@ const LeftBar: React.FC<ILeftBarProps> = (props) => {
       style={{
         background: "rgba(249, 250, 251, 0.60)",
       }}
-      className="flex-2 p-4 rounded-xl h-full overflow-auto"
+      className="flex-2 p-4 rounded-xl h-full overflow-auto transition-all scroll-hover"
     >
       <div className="flex flex-col gap-6">
         <div className="rounded-xl text-white p-6 bg-gradient-green-2">

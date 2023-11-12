@@ -11,7 +11,7 @@ const LessonContent: React.FC<ILessonContentProps> = (props) => {
   const [showAll, setShowAll] = useState(false);
 
   return (
-    <div className="rounded-3xl h-full w-full bg-white overflow-auto">
+    <div className="rounded-3xl h-full w-full bg-white overflow-auto scroll-hover">
       <div className="w-full relative h-[370px] flex justify-center items-center">
         <Image
           className="w-full h-full absolute left-0 z-0 object-cover"

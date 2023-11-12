@@ -1,5 +1,7 @@
+import GameScreen from "../components/Screen/Game";
+
 const Page = () => {
-  return <div>Test</div>;
+  return <GameScreen />;
 };
 
 export default Page;

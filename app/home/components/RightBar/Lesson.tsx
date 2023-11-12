@@ -1,6 +1,6 @@
-interface ILeftBarProps {}
+import { IRightBarProps } from ".";
 
-const LeftBar: React.FC<ILeftBarProps> = (props) => {
+const LessonRightBar: React.FC<IRightBarProps> = (props) => {
   return (
     <div className="flex-2 border-l border-bright-gray h-auto bg-white p-6">
       <div className="flex flex-col gap-4">
@@ -59,4 +59,4 @@ const LeftBar: React.FC<ILeftBarProps> = (props) => {
   );
 };
 
-export default LeftBar;
+export default LessonRightBar;

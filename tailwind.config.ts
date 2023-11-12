@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 const config: Config = {
   content: [
@@ -44,9 +45,18 @@ const config: Config = {
         "blue-berry": "#3F83F8",
         linen: "#FDECEB",
         "carmine-pink": "#F04438",
+        dandelion: "#FFD66D",
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(({ addUtilities }) => {
+      addUtilities({
+        ".overflow-overlay": {
+          overflow: "overlay",
+        },
+      });
+    }),
+  ],
 };
 export default config;
