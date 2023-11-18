@@ -14,6 +14,13 @@ import MedalOne from "./MedalOne";
 import MedalTwo from "./MedalTwo";
 import MedalThree from "./MedalThree";
 import MedalFour from "./MedalFour";
+import SettingDot from "./SettingDot";
+import Copy from "./Copy";
+import RemoveUser from "./RemoveUser";
+import CloseIcon from "./Close";
+import Glass from "./Glass";
+import PlusIcon from "./Plus";
+import MinusIcon from "./Minus";
 
 interface IconProps extends React.HTMLProps<any> {
   type: string;
@@ -28,20 +35,27 @@ const RsIcon: React.FC<IconProps> = (props) => {
   const listIcons: IconList = useMemo(
     () => ({
       book: <Book {...props} />,
+      profile: <Profile {...props} />,
+      clock: <Clock {...props} />,
+      copy: <Copy {...props} />,
+      close: <CloseIcon {...props} />,
+      glass: <Glass {...props} />,
+      plus: <PlusIcon {...props} />,
+      minus: <MinusIcon {...props} />,
+      sword: <Sword {...props} />,
       "game-control": <GameControl {...props} />,
       "group-user": <GroupUser {...props} />,
       "double-user": <DoubleUser {...props} />,
-      profile: <Profile {...props} />,
-      clock: <Clock {...props} />,
+      "setting-dot": <SettingDot {...props} />,
       "next-media-button": <NextMediaButton {...props} />,
       "prev-media-button": <PrevMediaButton {...props} />,
       "play-button": <PlayButton {...props} />,
       "arrow-down": <ArrowDown {...props} />,
-      sword: <Sword {...props} />,
       "medal-1": <MedalOne {...props} />,
       "medal-2": <MedalTwo {...props} />,
       "medal-3": <MedalThree {...props} />,
       "medal-4": <MedalFour {...props} />,
+      "remove-user": <RemoveUser {...props} />,
     }),
     [props]
   );

@@ -46,6 +46,7 @@ const config: Config = {
         linen: "#FDECEB",
         "carmine-pink": "#F04438",
         dandelion: "#FFD66D",
+        "auro-metal-saurus": "#6B7280",
       },
     },
   },

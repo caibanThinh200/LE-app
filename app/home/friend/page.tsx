@@ -1,5 +1,11 @@
+import FriendScreen from "../components/Screen/Friend";
+
 const Page = () => {
-  return <div>Test</div>;
+  return (
+    <div>
+      <FriendScreen />
+    </div>
+  );
 };
 
 export default Page;
