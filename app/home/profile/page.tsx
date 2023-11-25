@@ -1,5 +1,7 @@
+import ProfileScreen from "../components/Screen/Profile";
+
 const Page = () => {
-  return <div>Test</div>;
+  return <ProfileScreen />;
 };
 
 export default Page;

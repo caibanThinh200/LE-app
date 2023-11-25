@@ -21,6 +21,9 @@ import CloseIcon from "./Close";
 import Glass from "./Glass";
 import PlusIcon from "./Plus";
 import MinusIcon from "./Minus";
+import Exit from "./Exit";
+import EditPencil from "./EditPencel";
+import Camera from "./Camera";
 
 interface IconProps extends React.HTMLProps<any> {
   type: string;
@@ -43,6 +46,9 @@ const RsIcon: React.FC<IconProps> = (props) => {
       plus: <PlusIcon {...props} />,
       minus: <MinusIcon {...props} />,
       sword: <Sword {...props} />,
+      exit: <Exit {...props} />,
+      camera: <Camera {...props} />,
+      "edit-pencil": <EditPencil {...props} />,
       "game-control": <GameControl {...props} />,
       "group-user": <GroupUser {...props} />,
       "double-user": <DoubleUser {...props} />,

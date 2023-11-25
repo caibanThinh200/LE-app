@@ -19,6 +19,7 @@ const RightBar: React.FC<IRightBarProps> = (props) => {
       "/home": LessonRightBar,
       "/home/game": GameRightBar,
       "/home/friend": () => null,
+      "/home/profile": () => null,
     }),
     []
   );
