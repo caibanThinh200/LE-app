@@ -3,11 +3,14 @@
 import Button from "@/app/components/Button";
 import RsIcon from "@/app/components/Icon";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface ILessonContentProps {}
 
 const LessonContent: React.FC<ILessonContentProps> = (props) => {
+  const pathname = usePathname();
+  const router = useRouter();
   const [showAll, setShowAll] = useState(false);
 
   return (
@@ -37,7 +40,11 @@ const LessonContent: React.FC<ILessonContentProps> = (props) => {
               <p className="text-[#6B7280]">32 phút</p>
             </div>
             <div>
-              <Button type="primary" className="flex gap-2 items-center">
+              <Button
+                onClick={() => router.push(`${pathname}/video?showVideo=true`)}
+                type="primary"
+                className="flex gap-2 items-center"
+              >
                 <RsIcon type="play-button" />
                 Bắt đầu ngay
               </Button>

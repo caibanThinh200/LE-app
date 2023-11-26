@@ -24,6 +24,11 @@ import MinusIcon from "./Minus";
 import Exit from "./Exit";
 import EditPencil from "./EditPencel";
 import Camera from "./Camera";
+import ArrowClockWise from "./ArrowClockWise";
+import Speaker from "./Speaker";
+import SpeakerMute from "./SpeakerMute";
+import ZoomFull from "./ZoomFull";
+import Pause from "./Pause";
 
 interface IconProps extends React.HTMLProps<any> {
   type: string;
@@ -48,6 +53,10 @@ const RsIcon: React.FC<IconProps> = (props) => {
       sword: <Sword {...props} />,
       exit: <Exit {...props} />,
       camera: <Camera {...props} />,
+      speaker: <Speaker {...props} />,
+      pause: <Pause {...props} />,
+      "zoom-full": <ZoomFull {...props} />,
+      "speaker-mute": <SpeakerMute {...props} />,
       "edit-pencil": <EditPencil {...props} />,
       "game-control": <GameControl {...props} />,
       "group-user": <GroupUser {...props} />,
@@ -62,6 +71,7 @@ const RsIcon: React.FC<IconProps> = (props) => {
       "medal-3": <MedalThree {...props} />,
       "medal-4": <MedalFour {...props} />,
       "remove-user": <RemoveUser {...props} />,
+      "arrow-clock-wise": <ArrowClockWise {...props} />,
     }),
     [props]
   );

@@ -1,8 +1,9 @@
 "use client";
 
 import Button from "@/app/components/Button";
-import Image from "next/image"; 
-import { usePathname, useRouter } from "next/navigation";
+import RsIcon from "@/app/components/Icon";
+import Image from "next/image";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface IHeaderProps {}
 
@@ -15,23 +16,34 @@ const MENU_ITEMS = [
 
 const Header: React.FC<IHeaderProps> = (props) => {
   const router = useRouter();
+  const params = useSearchParams();
 
   return (
     <div>
       <div className="container mx-auto py-4 max-w-[1440px]">
         <div className="flex justify-between items-center">
-          <div
+          {params.get("showVideo") ? (
+            <div
             onClick={() => router.back()}
             className="flex gap-2 items-center cursor-pointer"
           >
-            <Image
-              alt="Back"
-              width={44}
-              height={44}
-              src={"/svg/arrow-back.svg"}
-            />
-            <p className="text-independence font-bold">Trở về</p>
+            <RsIcon type="close" />
+            <p className="text-independence font-bold">Đóng bài học</p>
           </div>
+          ) : (
+            <div
+              onClick={() => router.back()}
+              className="flex gap-2 items-center cursor-pointer"
+            >
+              <Image
+                alt="Back"
+                width={44}
+                height={44}
+                src={"/svg/arrow-back.svg"}
+              />
+              <p className="text-independence font-bold">Trở về</p>
+            </div>
+          )}
           <div>
             <p className="text-primary-green text-[24px]">
               Chủ đề 1:{" "}
