@@ -29,6 +29,9 @@ import Speaker from "./Speaker";
 import SpeakerMute from "./SpeakerMute";
 import ZoomFull from "./ZoomFull";
 import Pause from "./Pause";
+import Microphone from "./Microphone";
+import CaretRight from "./CaretRight";
+import Reload from "./Reload";
 
 interface IconProps extends React.HTMLProps<any> {
   type: string;
@@ -55,6 +58,9 @@ const RsIcon: React.FC<IconProps> = (props) => {
       camera: <Camera {...props} />,
       speaker: <Speaker {...props} />,
       pause: <Pause {...props} />,
+      microphone: <Microphone {...props} />,
+      reload: <Reload {...props} />,
+      "caret-right": <CaretRight {...props} />,
       "zoom-full": <ZoomFull {...props} />,
       "speaker-mute": <SpeakerMute {...props} />,
       "edit-pencil": <EditPencil {...props} />,

@@ -4,7 +4,7 @@ import Button from "@/app/components/Button";
 import RsIcon from "@/app/components/Icon";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 interface ILessonContentProps {}
 

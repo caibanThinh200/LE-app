@@ -11,8 +11,9 @@ import React, {
 import * as sdk from "microsoft-cognitiveservices-speech-sdk";
 import _ from "lodash";
 import { Doughnut } from "react-chartjs-2";
-import { Chart, ArcElement } from "chart.js";
 import { twMerge } from "tailwind-merge";
+import Button from "../Button";
+import RsIcon from "../Icon";
 
 interface WordResult {
   Word: string;
@@ -33,23 +34,27 @@ interface WordResult {
   }[];
 }
 
+interface ISpeechToTextProps {
+  referenceText: string;
+}
+
 const SPEECH_KEY = "afc6b1de18844a51a7e0bb13d06a26a7";
 const SPEECH_REGION = "eastus";
 
-export function SpeechToTextComponent(props: any) {
-  const [isListening, setIsListening] = useState(false);
+export function SpeechToTextComponent(props: ISpeechToTextProps) {
   const speechConfig = useRef<sdk.SpeechConfig>();
   const audioConfig = useRef<sdk.AudioConfig>();
   const recognizer = useRef<sdk.SpeechRecognizer>();
 
+  const [isListening, setIsListening] = useState(false);
+  const [wordDetail, setWordDetail] = useState<Array<WordResult>>([]);
+  const [hasResult, setHasResult] = useState(false);
   const [pronouciationScore, setPronouciationScore] = useState({
     accuracy: 0,
     pronunciation: 0,
     completeness: 0,
     fluency: 0,
   });
-  const [wordDetail, setWordDetail] = useState<Array<WordResult>>([]);
-  const [hasResult, setHasResult] = useState(false);
 
   useEffect(() => {
     (speechConfig.current as sdk.SpeechConfig) =
@@ -62,11 +67,9 @@ export function SpeechToTextComponent(props: any) {
       speechConfig.current as sdk.SpeechConfig,
       audioConfig.current
     );
-
-    var reference_text = "What's the weather like today ?";
     // create pronunciation assessment config, set grading system, granularity and if enable miscue based on your requirement.
     const pronunciationAssessmentConfig = new sdk.PronunciationAssessmentConfig(
-      reference_text,
+      props.referenceText,
       sdk.PronunciationAssessmentGradingSystem.HundredMark,
       sdk.PronunciationAssessmentGranularity.Phoneme,
       true
@@ -207,6 +210,22 @@ export function SpeechToTextComponent(props: any) {
     []
   );
 
+  const averageScore =
+    Object.keys(pronouciationScore).reduce(
+      (prev, current) => prev + pronouciationScore[current as "accuracy"],
+      0
+    ) / Object.keys(pronouciationScore).length;
+
+  const averageData = {
+    labels: ["Total"],
+    datasets: [
+      {
+        data: [averageScore, 100 - averageScore],
+        backgroundColor: [averageScore > 50 ? "#2AB032" : "#F05252", "#EEEEEE"],
+      },
+    ],
+  };
+
   const accuracyData = {
     labels: ["Accuracy"],
     datasets: [
@@ -254,19 +273,67 @@ export function SpeechToTextComponent(props: any) {
   };
 
   return (
-    <div className="min-h-[300px] smart-edu-block bg-white animate-[fadeIn_0.5s_ease-in-out] relative">
-      <p className="mb-10">
-        <b>Paragraph:</b> What's the weather like today ?
-      </p>
-      <button
-        className="mr-5 rounded-full bg-primary-green text-white px-5 py-2"
-        onClick={resumeListening}
-      >
-        Start Recording
-      </button>
-      {hasResult && <button onClick={props.onContinue}>Continue video</button>}
+    <div className="min-h-[300px] h-fit p-5 bg-white relative">
+      {!averageScore ? (
+        <div className="flex flex-col justify-between min-h-[inherit]">
+          <div className="flex-1 flex flex-col justify-center">
+            <p className="font-bold text-lg text-independence text-center mx-auto">
+              {props.referenceText}
+            </p>
+          </div>
+          <div className="p-4 flex w-full justify-center">
+            <Button
+              className="flex gap-2 items-center"
+              // onClick={() => setCurrentPronounce(undefined)}
+              type="primary"
+            >
+              <RsIcon type="microphone" />
+              Chọn để nói
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-6">
+          <div className="text-center">
+            <p className="text-lg font-bold text-independence">
+              {averageScore > 50 ? "Tốt lắm 🥰" : "Bạn cần cố gắng thêm 😟"}
+            </p>
+          </div>
+          <div className="border border-primary-green rounded-xl p-6 py-10 bg-gradient-green-3">
+            <div className="gap-8 flex items-center">
+              <div className="text-primary-green text-2xl font-bold w-1/2">
+                {props.referenceText}
+              </div>
+              <div className="w-1/2">
+                <Doughnut
+                  className="scale-75"
+                  data={averageData}
+                  options={options}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-center gap-2">
+            <Button
+              className="flex gap-2 items-center bg-independence text-white font-bold"
+              type="primary"
+            >
+              <RsIcon type="reload" />
+              Thử lại
+            </Button>
+            <Button
+              className="flex gap-2 items-center text-white font-bold"
+              type="primary"
+            >
+              Tiếp tục
+              <RsIcon type="caret-right" />
+            </Button>
+          </div>
+        </div>
+      )}
+      {/* {hasResult && <button onClick={props.onContinue}>Continue video</button>} */}
       {/* <button onClick={stopListening}>Stop Recording</button> */}
-      <div className="mt-10 grid grid-cols-4">
+      {/* <div className="mt-10 grid grid-cols-4">
         <div className="flex flex-col gap-10 items-center">
           <h3>Accuracy</h3>
           <h3>{pronouciationScore.accuracy}</h3>
@@ -299,8 +366,8 @@ export function SpeechToTextComponent(props: any) {
             options={options}
           />
         </div>
-      </div>
-      <div className="mt-10 flex gap-5 justify-center">
+      </div> */}
+      {/* <div className="mt-10 flex gap-5 justify-center">
         {wordDetail.map((word, index) => (
           <div className="text-center" key={index}>
             <p className="text-[20px]">{word.Word}</p>
@@ -321,7 +388,7 @@ export function SpeechToTextComponent(props: any) {
             )}
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }

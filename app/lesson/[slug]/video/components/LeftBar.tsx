@@ -5,8 +5,11 @@ import { ChartOptions } from "chart.js";
 import Image from "next/image";
 import { useMemo } from "react";
 import { Doughnut } from "react-chartjs-2";
+import { Pronouce } from "./Video";
 
-interface ILeftBarProps {}
+interface ILeftBarProps {
+  listPronouce: Pronouce[];
+}
 
 const LeftBar: React.FC<ILeftBarProps> = (props) => {
   const totalPoint = {

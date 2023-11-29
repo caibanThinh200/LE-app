@@ -1,19 +1,44 @@
 "use client";
 
 import RsIcon from "@/app/components/Icon";
+import { convertTimeToSeconds } from "@/app/util/function";
 import Image from "next/image";
-import React, { useState, useRef, useEffect, FunctionComponent } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  FunctionComponent,
+  Dispatch,
+  SetStateAction,
+} from "react";
+import Pronounce from "./PronouceModal";
 
+export type Pronouce = {
+  paragraph: string;
+  time: string;
+  status?: "pending" | "complete";
+};
 interface VideoPlayerProps {
   src: string;
+  pronounces: Array<Pronouce>;
+  setRootListPronounce: Dispatch<SetStateAction<Pronouce[]>>;
 }
 
-const VideoAssessment: FunctionComponent<VideoPlayerProps> = ({ src }) => {
+const VideoAssessment: FunctionComponent<VideoPlayerProps> = ({
+  src,
+  pronounces,
+  setRootListPronounce,
+}) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
+  const [listPronounce, setListPronounce] = useState<Pronouce[]>([]);
+  const [currentPronounce, setCurrentPronounce] = useState<Pronouce>();
+  const [pronouceScored, setPronouceScored] = useState<Pronouce[]>([]);
+
+  // console.log(pronounces.map((pro) => convertTimeToSeconds(pro.time)));
 
   useEffect(() => {
     if (videoRef.current) {
@@ -21,6 +46,10 @@ const VideoAssessment: FunctionComponent<VideoPlayerProps> = ({ src }) => {
       isPlaying ? video.play() : video.pause();
     }
   }, [isPlaying]);
+
+  useEffect(() => {
+    setListPronounce(pronounces);
+  }, [pronounces]);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -49,10 +78,31 @@ const VideoAssessment: FunctionComponent<VideoPlayerProps> = ({ src }) => {
 
   const handleTimeUpdate = (): void => {
     const video = videoRef.current;
+    const listPronouceSecond = listPronounce.map((pro) =>
+      convertTimeToSeconds(pro.time)
+    );
     if (video) {
+      const currentSecond = Math.floor(video.currentTime);
       const progress = (video.currentTime / video.duration) * 100;
+      if (currentSecond === listPronouceSecond[0]) {
+        setTimeout(() => {
+          video.pause();
+          setCurrentPronounce(listPronounce[0]);
+        }, 2000);
+      }
       setProgress(progress);
     }
+  };
+
+  const handleContinue = () => {
+    setPronouceScored([...pronouceScored, currentPronounce as Pronouce]);
+    setCurrentPronounce(undefined);
+    setListPronounce(
+      listPronounce.filter(
+        (pro) => pro.paragraph !== currentPronounce?.paragraph
+      )
+    );
+    videoRef.current?.play();
   };
 
   return (
@@ -125,6 +175,18 @@ const VideoAssessment: FunctionComponent<VideoPlayerProps> = ({ src }) => {
           </button>
         </div>
       </div>
+      {currentPronounce && (
+        <Pronounce
+          videoRef={videoRef}
+          currentPronounce={currentPronounce as Pronouce}
+          handleContinue={handleContinue}
+          setCurrentPronounce={
+            setCurrentPronounce as Dispatch<
+              SetStateAction<Pronouce | undefined>
+            >
+          }
+        />
+      )}
     </div>
   );
 };
