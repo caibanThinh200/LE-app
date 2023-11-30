@@ -1,7 +1,7 @@
 "use client";
 
 import RsIcon from "@/app/components/Icon";
-import { convertTimeToSeconds } from "@/app/util/function";
+import { convertTimeToSeconds, secondsToHms } from "@/app/util/function";
 import Image from "next/image";
 import React, {
   useState,
@@ -17,7 +17,7 @@ export type Pronouce = {
   paragraph: string;
   time: string;
   status?: "pending" | "complete";
-  pronouceParagraph?: string
+  pronouceParagraph?: string;
   score?: PronouceScore;
 };
 
@@ -48,7 +48,7 @@ const VideoAssessment: FunctionComponent<VideoPlayerProps> = ({
   const [listPronounce, setListPronounce] = useState<Pronouce[]>([]);
   const [currentPronounce, setCurrentPronounce] = useState<Pronouce>();
   const [pronouceScored, setPronouceScored] = useState<Pronouce[]>([]);
-  const [videoTime, setVideoTime] = useState<number>(0);
+  const [videoTime, setVideoTime] = useState<string>("");
 
   // console.log(pronounces.map((pro) => convertTimeToSeconds(pro.time)));
 
@@ -106,6 +106,7 @@ const VideoAssessment: FunctionComponent<VideoPlayerProps> = ({
           setCurrentPronounce(listPronounce[0]);
         }, 2000);
       }
+      setVideoTime(secondsToHms(video.currentTime));
       setProgress(progress);
     }
   };
@@ -143,13 +144,16 @@ const VideoAssessment: FunctionComponent<VideoPlayerProps> = ({
           />
         </div>
         <div className="flex justify-between items-center">
-          <button onClick={handleMuteToggle} className="text-white">
-            {isMuted ? (
-              <RsIcon className="w-[30px]" type="speaker-mute" />
-            ) : (
-              <RsIcon className="w-[30px]" type="speaker" />
-            )}
-          </button>
+          <div className="flex gap-5 items-center">
+            <button onClick={handleMuteToggle} className="text-white">
+              {isMuted ? (
+                <RsIcon className="w-[30px]" type="speaker-mute" />
+              ) : (
+                <RsIcon className="w-[30px]" type="speaker" />
+              )}
+            </button>
+            <p className="text-white font-bold">{videoTime}</p>
+          </div>
           <div className="flex gap-2 items-center">
             <button className="text-white">
               <RsIcon
