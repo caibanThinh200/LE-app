@@ -16,6 +16,7 @@ import { Pronouce } from "./Video";
 import { SpeechToTextComponent } from "@/app/components/SpeechToText";
 import * as sdk from "microsoft-cognitiveservices-speech-sdk";
 import { Doughnut } from "react-chartjs-2";
+import { Tooltip } from "react-tooltip";
 
 interface IPronounceProps {
   videoRef: React.RefObject<HTMLVideoElement>;
@@ -45,6 +46,12 @@ interface WordResult {
 
 const SPEECH_KEY = "afc6b1de18844a51a7e0bb13d06a26a7";
 const SPEECH_REGION = "eastus";
+const initialScore = {
+  accuracy: 0,
+  pronunciation: 0,
+  completeness: 0,
+  fluency: 0,
+};
 
 const Pronounce: React.FC<IPronounceProps> = ({
   currentPronounce,
@@ -58,12 +65,7 @@ const Pronounce: React.FC<IPronounceProps> = ({
   const [isListening, setIsListening] = useState(false);
   const [wordDetail, setWordDetail] = useState<Array<WordResult>>([]);
   const [hasResult, setHasResult] = useState(false);
-  const [pronouciationScore, setPronouciationScore] = useState({
-    accuracy: 0,
-    pronunciation: 0,
-    completeness: 0,
-    fluency: 0,
-  });
+  const [pronouciationScore, setPronouciationScore] = useState(initialScore);
 
   useEffect(() => {
     if (currentPronounce) {
@@ -100,6 +102,32 @@ const Pronounce: React.FC<IPronounceProps> = ({
           completeness: pronunciation_result.completenessScore,
           fluency: pronunciation_result.fluencyScore,
         });
+        setCurrentPronounce({
+          ...currentPronounce,
+          pronouceParagraph: pronunciation_result.detailResult.Words.map(
+            (word) => word.Word
+          ).join(" "),
+          score: {
+            accuracy: pronunciation_result.accuracyScore,
+            pronunciation: pronunciation_result.pronunciationScore,
+            completeness: pronunciation_result.completenessScore,
+            fluency: pronunciation_result.fluencyScore,
+            average:
+              Object.keys(
+                pronunciation_result.detailResult.PronunciationAssessment
+              ).reduce(
+                (prev, current) =>
+                  prev +
+                  pronunciation_result.detailResult.PronunciationAssessment[
+                    current as "AccuracyScore"
+                  ],
+                0
+              ) /
+              Object.keys(
+                pronunciation_result.detailResult.PronunciationAssessment
+              ).length,
+          },
+        });
         setWordDetail(pronunciation_result.detailResult.Words);
         setHasResult(true);
         (recognizer.current as sdk.SpeechRecognizer).close();
@@ -123,7 +151,6 @@ const Pronounce: React.FC<IPronounceProps> = ({
           // setRecTranscript(transcript);
         }
       };
-
       (recognizer.current as sdk.SpeechRecognizer).recognizeOnceAsync(function (
         successfulResult
       ) {
@@ -155,7 +182,7 @@ const Pronounce: React.FC<IPronounceProps> = ({
         });
       };
     }
-  }, [currentPronounce]);
+  }, [currentPronounce, setCurrentPronounce]);
 
   const pauseListening = () => {
     setIsListening(false);
@@ -222,6 +249,15 @@ const Pronounce: React.FC<IPronounceProps> = ({
     []
   );
 
+  const handleRetry = () => {
+    setCurrentPronounce({
+      ...currentPronounce,
+      score: initialScore,
+      pronouceParagraph: "",
+    });
+    setPronouciationScore(initialScore);
+  };
+
   const averageScore =
     Object.keys(pronouciationScore).reduce(
       (prev, current) => prev + pronouciationScore[current as "accuracy"],
@@ -236,6 +272,13 @@ const Pronounce: React.FC<IPronounceProps> = ({
         backgroundColor: [averageScore > 50 ? "#2AB032" : "#F05252", "#EEEEEE"],
       },
     ],
+  };
+
+  const pronounceLabel = {
+    accuracy: "Chính xác",
+    pronunciation: "Lưu loát",
+    completeness: "Hoàn thiện",
+    fluency: "Vần điệu",
   };
 
   // const accuracyData = {
@@ -347,12 +390,37 @@ const Pronounce: React.FC<IPronounceProps> = ({
                           <div className="text-primary-green text-2xl font-bold w-1/2">
                             {currentPronounce?.paragraph}
                           </div>
-                          <div className="w-1/2">
-                            <Doughnut
-                              className="scale-75"
-                              data={averageData}
-                              options={options}
-                            />
+                          <div className="w-1/2 relative flex flex-col gap-0">
+                            <div className="relative">
+                              <p className="text-[28px] text-independence absolute font-bold top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                                {averageScore}%
+                              </p>
+                              <Doughnut
+                                className="scale-75"
+                                data={averageData}
+                                options={options}
+                              />
+                            </div>
+                            <div>
+                              <p
+                                className="text-independence text-center cursor-pointer"
+                                id="detail"
+                              >
+                                Xem chi tiết
+                              </p>
+                              <Tooltip anchorSelect="#detail" place="top">
+                                <ul className="flex flex-col gap-4">
+                                  {Object.keys(pronouciationScore).map(
+                                    (key) => (
+                                      <li key={key}>
+                                        {pronounceLabel[key as "accuracy"]}:{" "}
+                                        {pronouciationScore[key as "accuracy"]}
+                                      </li>
+                                    )
+                                  )}
+                                </ul>
+                              </Tooltip>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -360,6 +428,7 @@ const Pronounce: React.FC<IPronounceProps> = ({
                         <Button
                           className="flex gap-2 items-center bg-independence text-white font-bold"
                           type="primary"
+                          onClick={handleRetry}
                         >
                           <RsIcon type="reload" />
                           Thử lại

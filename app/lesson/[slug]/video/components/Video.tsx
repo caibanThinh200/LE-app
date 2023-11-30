@@ -17,11 +17,22 @@ export type Pronouce = {
   paragraph: string;
   time: string;
   status?: "pending" | "complete";
+  pronouceParagraph?: string
+  score?: PronouceScore;
+};
+
+export type PronouceScore = {
+  accuracy?: number;
+  pronunciation?: number;
+  completeness?: number;
+  fluency?: number;
+  average?: number;
 };
 interface VideoPlayerProps {
   src: string;
   pronounces: Array<Pronouce>;
   setRootListPronounce: Dispatch<SetStateAction<Pronouce[]>>;
+  // score: PronouceScore
 }
 
 const VideoAssessment: FunctionComponent<VideoPlayerProps> = ({
@@ -37,6 +48,7 @@ const VideoAssessment: FunctionComponent<VideoPlayerProps> = ({
   const [listPronounce, setListPronounce] = useState<Pronouce[]>([]);
   const [currentPronounce, setCurrentPronounce] = useState<Pronouce>();
   const [pronouceScored, setPronouceScored] = useState<Pronouce[]>([]);
+  const [videoTime, setVideoTime] = useState<number>(0);
 
   // console.log(pronounces.map((pro) => convertTimeToSeconds(pro.time)));
 
@@ -50,6 +62,10 @@ const VideoAssessment: FunctionComponent<VideoPlayerProps> = ({
   useEffect(() => {
     setListPronounce(pronounces);
   }, [pronounces]);
+
+  useEffect(() => {
+    setRootListPronounce(pronouceScored);
+  }, [pronouceScored, setRootListPronounce]);
 
   useEffect(() => {
     if (videoRef.current) {

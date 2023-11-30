@@ -22,6 +22,8 @@ const pronounces = [
 const Video = () => {
   const [listPronounce, setListPronounce] = useState<Pronouce[]>([]);
 
+  console.log(listPronounce)
+
   return (
     <div className="container mx-auto py-4 max-w-[1440px]">
       <div className="flex h-[78vh] mt-5 gap-6">

@@ -12,11 +12,11 @@ interface ILeftBarProps {
 }
 
 const LeftBar: React.FC<ILeftBarProps> = (props) => {
-  const totalPoint = {
+  const totalPoint = (point: number) => ({
     labels: ["Accuracy"],
     datasets: [
       {
-        data: [70, 100 - 70],
+        data: [point, 100 - point],
         backgroundColor: ["#2AB032", "#EEEEEE"],
       },
     ],
@@ -45,7 +45,7 @@ const LeftBar: React.FC<ILeftBarProps> = (props) => {
         },
       },
     },
-  };
+  });
 
   const options: ChartOptions<"doughnut"> = useMemo(
     () => ({
@@ -62,7 +62,7 @@ const LeftBar: React.FC<ILeftBarProps> = (props) => {
     }),
     []
   );
-
+  console.log(props.listPronouce);
   return (
     <div
       style={{
@@ -71,43 +71,44 @@ const LeftBar: React.FC<ILeftBarProps> = (props) => {
       className="p-4 rounded-xl h-full overflow-auto transition-all scroll-hover"
     >
       <div className="flex flex-col gap-4">
-        {Array(10)
-          .fill("")
-          .map((_, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-xl py-2 px-3 border border-bright-gray flex gap-2 items-center justify-between"
-            >
+        {(props.listPronouce || []).map((_, index) => (
+          <div
+            key={index}
+            className="bg-white rounded-xl py-2 px-3 border border-bright-gray flex gap-2 items-center justify-between"
+          >
+            <div>
               <div>
-                <div>
-                  <p className="font-light text-auro-metal-saurus text-xs">
-                    Mẫu:{" "}
-                    <span className="text-independence font-medium">
-                      Hello, i love you
-                    </span>
-                  </p>
-                </div>
-                <div>
-                  <p className="font-light text-auro-metal-saurus text-xs">
-                    Của bạn:{" "}
-                    <span className="text-primary-green font-medium">
-                      Hello, i love you
-                    </span>
-                  </p>
-                </div>
+                <p className="font-light text-auro-metal-saurus text-xs">
+                  Mẫu:{" "}
+                  <span className="text-independence font-medium">
+                    {_.paragraph}
+                  </span>
+                </p>
               </div>
               <div>
-                <Doughnut
-                  className="!h-[50px]"
-                  data={totalPoint}
-                  options={options}
-                />
-              </div>
-              <div>
-                <RsIcon type="arrow-clock-wise" />
+                <p className="font-light text-auro-metal-saurus text-xs">
+                  Của bạn:{" "}
+                  <span className="text-primary-green font-medium">
+                    {_.pronouceParagraph}
+                  </span>
+                </p>
               </div>
             </div>
-          ))}
+            <div className="relative">
+              <p className="text-[8px] text-independence absolute font-bold top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                {_.score?.average}%
+              </p>
+              <Doughnut
+                className="!h-[50px]"
+                data={totalPoint(_.score?.average as number)}
+                options={options}
+              />
+            </div>
+            {/* <div>
+              <RsIcon type="arrow-clock-wise" />
+            </div> */}
+          </div>
+        ))}
       </div>
     </div>
   );
