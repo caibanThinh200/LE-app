@@ -27,7 +27,7 @@ const InProgress: React.FC<ILessonCardProps> = (props) => {
                   style={{
                     width: "50%",
                     background:
-                      "linear-gradient(180deg, #FFDF6D -33.33%, #BC5216 112.5%)",
+                      "linear-gradient(180deg, #FFD66D -33.33%, #EF6416 112.5%)",
                   }}
                   className="absolute rounded-full w-full h-full left-0 bg-light-silver"
                 ></div>

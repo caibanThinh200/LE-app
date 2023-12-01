@@ -103,15 +103,23 @@ const RightBar: React.FC<IRightBarProps> = (props) => {
             </Tab.List>
             <Tab.Panels>
               <Tab.Panel>
-                <Doughnut
-                  className="scale-75"
-                  data={totalPoint}
-                  options={options}
-                />
+                <div className="relative">
+                  <p className="text-[28px] text-independence absolute font-bold top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                    72%
+                  </p>
+                  <Doughnut
+                    className="scale-75"
+                    data={totalPoint}
+                    options={options}
+                  />
+                </div>
                 <div className="flex flex-col gap-4">
                   <div className="grid grid-cols-2 justify-between items-center">
                     <div className="w-full">🎯 Chính xác</div>
-                    <div className="w-full flex justify-end">
+                    <div className="relative  w-full flex justify-end">
+                      <p className="text-[12px] text-independence absolute font-bold top-1/2 right-[8px] -translate-y-1/2">
+                        72%
+                      </p>
                       <Doughnut
                         className="w-full !h-[44px]"
                         data={totalPoint}
@@ -121,7 +129,10 @@ const RightBar: React.FC<IRightBarProps> = (props) => {
                   </div>
                   <div className="grid grid-cols-2 justify-between items-center">
                     <div className="w-full">🗣️ Lưu loát</div>
-                    <div className="w-full flex justify-end">
+                    <div className="relative  w-full flex justify-end">
+                      <p className="text-[12px] text-independence absolute font-bold top-1/2 right-[8px] -translate-y-1/2">
+                        72%
+                      </p>
                       <Doughnut
                         className="w-full !h-[44px]"
                         data={totalPoint}
@@ -131,7 +142,10 @@ const RightBar: React.FC<IRightBarProps> = (props) => {
                   </div>
                   <div className="grid grid-cols-2 justify-between items-center">
                     <div className="w-full">💬 Hoàn thiện</div>
-                    <div className="w-full flex justify-end">
+                    <div className="relative  w-full flex justify-end">
+                      <p className="text-[12px] text-independence absolute font-bold top-1/2 right-[8px] -translate-y-1/2">
+                        72%
+                      </p>
                       <Doughnut
                         className="w-full !h-[44px]"
                         data={totalPoint}
@@ -141,7 +155,10 @@ const RightBar: React.FC<IRightBarProps> = (props) => {
                   </div>
                   <div className="grid grid-cols-2 justify-between items-center">
                     <div className="w-full">🏊 Vần điệu</div>
-                    <div className="w-full flex justify-end">
+                    <div className="relative  w-full flex justify-end">
+                      <p className="text-[12px] text-independence absolute font-bold top-1/2 right-[8px] -translate-y-1/2">
+                        72%
+                      </p>
                       <Doughnut
                         className="w-full !h-[44px]"
                         data={totalPoint}

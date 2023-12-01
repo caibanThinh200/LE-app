@@ -40,7 +40,7 @@ const LessonRightBar: React.FC<IRightBarProps> = (props) => {
                         style={{
                           width: "30%",
                           background:
-                            "linear-gradient(180deg, #FFDF6D -33.33%, #BC5216 112.5%)",
+                            "linear-gradient(180deg, #FFD66D -33.33%, #EF6416 112.5%)",
                         }}
                         className="rounded-full absolute h-full left-0"
                       ></div>

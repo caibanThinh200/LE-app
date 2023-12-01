@@ -54,7 +54,7 @@ const Header: React.FC<IHeaderProps> = (props) => {
             <Button
               style={{
                 background:
-                  "linear-gradient(180deg, #FFDF6D -33.33%, #BC5216 112.5%)",
+                  "linear-gradient(180deg, #FFD66D -33.33%, #EF6416 112.5%)",
               }}
               type="primary"
               className="px-6 py-3 flex gap-3 items-center"
@@ -71,7 +71,7 @@ const Header: React.FC<IHeaderProps> = (props) => {
                   fill="#F9FAFB"
                 />
               </svg>
-              Nâng cấp mới
+              Nâng cấp pro
             </Button>
           </div>
         </div>
