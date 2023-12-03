@@ -103,6 +103,7 @@ const VideoAssessment: FunctionComponent<VideoPlayerProps> = ({
       if (currentSecond === listPronouceSecond[0]) {
         setTimeout(() => {
           video.pause();
+          setIsPlaying(false);
           setCurrentPronounce(listPronounce[0]);
         }, 2000);
       }
@@ -119,11 +120,12 @@ const VideoAssessment: FunctionComponent<VideoPlayerProps> = ({
         (pro) => pro.paragraph !== currentPronounce?.paragraph
       )
     );
+    setIsPlaying(true);
     videoRef.current?.play();
   };
 
   return (
-    <div className="relative rounded-xl overflow-hidden group">
+    <div className="relative rounded-xl overflow-visible group">
       <video
         ref={videoRef}
         src={src}
@@ -195,18 +197,14 @@ const VideoAssessment: FunctionComponent<VideoPlayerProps> = ({
           </button>
         </div>
       </div>
-      {currentPronounce && (
-        <Pronounce
-          videoRef={videoRef}
-          currentPronounce={currentPronounce as Pronouce}
-          handleContinue={handleContinue}
-          setCurrentPronounce={
-            setCurrentPronounce as Dispatch<
-              SetStateAction<Pronouce | undefined>
-            >
-          }
-        />
-      )}
+      <Pronounce
+        videoRef={videoRef}
+        currentPronounce={currentPronounce as Pronouce}
+        handleContinue={handleContinue}
+        setCurrentPronounce={
+          setCurrentPronounce as Dispatch<SetStateAction<Pronouce | undefined>>
+        }
+      />
     </div>
   );
 };

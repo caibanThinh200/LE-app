@@ -10,12 +10,33 @@ const config: Config = {
   theme: {
     extend: {
       animation: {
-        fadeIn: "fadeIn 1s ease-in-out forward",
+        fadeIn: "fadeIn 1s ease-in-out forwards",
+        fadeOut: "fadeOut 1s ease-in-out forwards",
       },
       keyframes: {
         fadeIn: {
-          "0%": { opacity: "0", bottom: "50" },
-          "100%": { opacity: "1", bottom: "2.5rem" },
+          from: {
+            opacity: "0",
+            bottom: "50",
+             transform: "translateY(-100px)"
+          },
+          to: {
+            opacity: "1",
+            // bottom: "2.5rem",
+            transform: "translateY(0px)",
+          },
+        },
+        fadeOut: {
+          from: {
+            opacity: "1",
+            bottom: "2.5rem",
+            transform: "translateY(0px)",
+          },
+          to: {
+            opacity: "0",
+            bottom: "50",
+            transform: "translateY(-100px)",
+          },
         },
       },
       container: {
@@ -25,7 +46,8 @@ const config: Config = {
         "gradient-green":
           "linear-gradient(352deg, #54AB72 5.5%, #4E9447 93.38%)",
         "gradient-green-2": "linear-gradient(180deg, #2AB032 0%, #109C59 100%)",
-        'gradient-green-3': 'linear-gradient(0deg, #E1FFE9 0%, #F9FAFB 103.77%)',
+        "gradient-green-3":
+          "linear-gradient(0deg, #E1FFE9 0%, #F9FAFB 103.77%)",
         "primary-gradient": "linear-gradient(180deg, #2AB032 0%, #109C59 100%)",
         "primary-hover-gradient":
           "linear-gradient(180deg, #129625 0%, #0B6D38 100%)",

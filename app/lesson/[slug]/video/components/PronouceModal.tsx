@@ -5,6 +5,8 @@ import Image from "next/image";
 import {
   Dispatch,
   Fragment,
+  MouseEvent,
+  MouseEventHandler,
   SetStateAction,
   useCallback,
   useEffect,
@@ -17,6 +19,9 @@ import { SpeechToTextComponent } from "@/app/components/SpeechToText";
 import * as sdk from "microsoft-cognitiveservices-speech-sdk";
 import { Doughnut } from "react-chartjs-2";
 import { Tooltip } from "react-tooltip";
+import Lottie from "lottie-react";
+import * as loading from "../../../../../public/lottie/loading.json";
+import { twMerge } from "tailwind-merge";
 
 interface IPronounceProps {
   videoRef: React.RefObject<HTMLVideoElement>;
@@ -66,9 +71,11 @@ const Pronounce: React.FC<IPronounceProps> = ({
   const [wordDetail, setWordDetail] = useState<Array<WordResult>>([]);
   const [hasResult, setHasResult] = useState(false);
   const [pronouciationScore, setPronouciationScore] = useState(initialScore);
+  const [allowRecord, setAllowRecord] = useState(false);
+  const [animationLoading, setAnimationLoading] = useState(false);
 
   useEffect(() => {
-    if (currentPronounce) {
+    if (currentPronounce && allowRecord) {
       (speechConfig.current as sdk.SpeechConfig) =
         sdk.SpeechConfig.fromSubscription(SPEECH_KEY, SPEECH_REGION);
       (speechConfig.current as sdk.SpeechConfig).speechRecognitionLanguage =
@@ -130,6 +137,7 @@ const Pronounce: React.FC<IPronounceProps> = ({
         });
         setWordDetail(pronunciation_result.detailResult.Words);
         setHasResult(true);
+        setAllowRecord(false);
         (recognizer.current as sdk.SpeechRecognizer).close();
       };
 
@@ -182,7 +190,7 @@ const Pronounce: React.FC<IPronounceProps> = ({
         });
       };
     }
-  }, [currentPronounce, setCurrentPronounce]);
+  }, [currentPronounce, setCurrentPronounce, allowRecord]);
 
   const pauseListening = () => {
     setIsListening(false);
@@ -249,7 +257,10 @@ const Pronounce: React.FC<IPronounceProps> = ({
     []
   );
 
-  const handleRetry = () => {
+  const handleRetry = (
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ) => {
+    e.stopPropagation();
     setCurrentPronounce({
       ...currentPronounce,
       score: initialScore,
@@ -327,130 +338,127 @@ const Pronounce: React.FC<IPronounceProps> = ({
   //   ],
   // };
   return (
-    <Transition appear show={!!currentPronounce} as={Fragment}>
-      <Dialog
-        as="div"
-        className="relative z-10"
-        onClose={() => setCurrentPronounce(undefined)}
+    <div
+      onClick={(e) => setCurrentPronounce(undefined)}
+      className={twMerge(
+        "absolute bg-black/80 top-0 delay-500 left-0 transition-all w-full h-full flex justify-center items-center",
+        !!currentPronounce ? "opacity-100 z-50" : "opacity-0 -z-10"
+      )}
+    >
+      <div
+        className={twMerge(
+          "min-h-[200px] h-fit p-5 px-10 rounded-xl bg-white relative z-[100]",
+          !!currentPronounce ? "animate-fadeIn" : "animate-fadeOut"
+        )}
       >
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-black/25" />
-        </Transition.Child>
-
-        <div className="fixed inset-0 over flow-y-auto ">
-          <div className="flex min-h-full items-center justify-center p-4">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
+        {!animationLoading ? (
+          currentPronounce && averageScore === 0 ? (
+            <div className="flex flex-col justify-between min-h-[inherit]">
+              <div className="flex-1 flex flex-col justify-center">
+                <p className="font-bold text-lg text-independence text-center mx-auto">
+                  {currentPronounce?.paragraph}
+                </p>
+              </div>
+              <div className="p-4 flex w-full justify-center">
+                <Button
+                  className="flex gap-2 items-center"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setAnimationLoading(true);
+                    setTimeout(() => {
+                      setAllowRecord(true);
+                      setAnimationLoading(false);
+                    }, 3000);
+                  }}
+                  type="primary"
+                >
+                  <RsIcon type="microphone" />
+                  {allowRecord ? 'Hệ thống đang thu âm, hãy đọc mẫu câu trên' : 'Chọn để nói'}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div
+              className={twMerge(
+                "flex flex-col gap-6",
+                !!currentPronounce ? "animate-fadeIn" : "animate-fadeOut"
+              )}
             >
-              <Dialog.Panel className="w-full max-w-[520px] min-h-[200px] overflow-hidden rounded-xl bg-white transition-all flex flex-col">
-                <div className="min-h-[300px] h-fit p-5 bg-white relative">
-                  {currentPronounce && !averageScore ? (
-                    <div className="flex flex-col justify-between min-h-[inherit]">
-                      <div className="flex-1 flex flex-col justify-center">
-                        <p className="font-bold text-lg text-independence text-center mx-auto">
-                          {currentPronounce?.paragraph}
-                        </p>
-                      </div>
-                      <div className="p-4 flex w-full justify-center">
-                        <Button
-                          className="flex gap-2 items-center"
-                          // onClick={() => setCurrentPronounce(undefined)}
-                          type="primary"
-                        >
-                          <RsIcon type="microphone" />
-                          Chọn để nói
-                        </Button>
-                      </div>
+              <div className="text-center">
+                <p className="text-lg font-bold text-independence">
+                  {averageScore > 50 ? "Tốt lắm 🥰" : "Bạn cần cố gắng thêm 😟"}
+                </p>
+              </div>
+              <div className="border border-primary-green rounded-xl p-6 py-10 bg-gradient-green-3">
+                <div className="gap-8 flex items-center">
+                  <div className="text-primary-green text-2xl font-bold w-1/2">
+                    {currentPronounce?.paragraph}
+                  </div>
+                  <div className="w-1/2 relative flex flex-col gap-0">
+                    <div className="relative">
+                      <p className="text-[28px] text-independence absolute font-bold top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                        {averageScore}%
+                      </p>
+                      <Doughnut
+                        className="scale-75"
+                        data={averageData}
+                        options={options}
+                      />
                     </div>
-                  ) : (
-                    <div className="flex flex-col gap-6">
-                      <div className="text-center">
-                        <p className="text-lg font-bold text-independence">
-                          {averageScore > 50
-                            ? "Tốt lắm 🥰"
-                            : "Bạn cần cố gắng thêm 😟"}
-                        </p>
-                      </div>
-                      <div className="border border-primary-green rounded-xl p-6 py-10 bg-gradient-green-3">
-                        <div className="gap-8 flex items-center">
-                          <div className="text-primary-green text-2xl font-bold w-1/2">
-                            {currentPronounce?.paragraph}
-                          </div>
-                          <div className="w-1/2 relative flex flex-col gap-0">
-                            <div className="relative">
-                              <p className="text-[28px] text-independence absolute font-bold top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                                {averageScore}%
-                              </p>
-                              <Doughnut
-                                className="scale-75"
-                                data={averageData}
-                                options={options}
-                              />
-                            </div>
-                            <div>
-                              <p
-                                className="text-independence text-center cursor-pointer"
-                                id="detail"
-                              >
-                                Xem chi tiết
-                              </p>
-                              <Tooltip anchorSelect="#detail" place="top">
-                                <ul className="flex flex-col gap-4">
-                                  {Object.keys(pronouciationScore).map(
-                                    (key) => (
-                                      <li key={key}>
-                                        {pronounceLabel[key as "accuracy"]}:{" "}
-                                        {pronouciationScore[key as "accuracy"]}
-                                      </li>
-                                    )
-                                  )}
-                                </ul>
-                              </Tooltip>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex justify-center gap-2">
-                        <Button
-                          className="flex gap-2 items-center bg-independence text-white font-bold"
-                          type="primary"
-                          onClick={handleRetry}
-                        >
-                          <RsIcon type="reload" />
-                          Thử lại
-                        </Button>
-                        <Button
-                          className="flex gap-2 items-center text-white font-bold"
-                          type="primary"
-                          onClick={() => handleContinue()}
-                        >
-                          Tiếp tục
-                          <RsIcon type="caret-right" />
-                        </Button>
-                      </div>
+                    <div>
+                      <p
+                        className="text-independence text-center cursor-pointer"
+                        id="detail"
+                      >
+                        Xem chi tiết
+                      </p>
+                      <Tooltip anchorSelect="#detail" place="top">
+                        <ul className="flex flex-col gap-4">
+                          {Object.keys(pronouciationScore).map((key) => (
+                            <li key={key}>
+                              {pronounceLabel[key as "accuracy"]}:{" "}
+                              {pronouciationScore[key as "accuracy"]}
+                            </li>
+                          ))}
+                        </ul>
+                      </Tooltip>
                     </div>
-                  )}
+                  </div>
                 </div>
-              </Dialog.Panel>
-            </Transition.Child>
-          </div>
-        </div>
-      </Dialog>
-    </Transition>
+              </div>
+              <div className="flex justify-center gap-2">
+                <Button
+                  className="flex gap-2 items-center bg-independence text-white font-bold"
+                  type="primary"
+                  onClick={handleRetry}
+                >
+                  <RsIcon type="reload" />
+                  Thử lại
+                </Button>
+                <Button
+                  className="flex gap-2 items-center text-white font-bold"
+                  type="primary"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setPronouciationScore(initialScore);
+                    return handleContinue();
+                  }}
+                >
+                  Tiếp tục
+                  <RsIcon type="caret-right" />
+                </Button>
+              </div>
+            </div>
+          )
+        ) : (
+          <Lottie
+            animationData={loading}
+            className="w-[400px]"
+            loop={true}
+          />
+        )}
+      </div>
+    </div>
   );
 };
 

@@ -13,22 +13,22 @@ const MENU_ITEMS = [
   {
     title: "Bài học",
     slug: "/home",
-    icon: <RsIcon type="book" />,
+    icon: "book",
   },
   {
     title: "Trò chơi",
     slug: "/home/game",
-    icon: <RsIcon type="game-control" />,
+    icon: "game-control",
   },
   // {
   //   title: "Bạn bè",
   //   slug: "/home/friend",
-  //   icon: <RsIcon type="group-user" />,
+  //   icon: "group-user",
   // },
   // {
   //   title: "Hồ sơ",
   //   slug: "/home/profile",
-  //   icon: <RsIcon type="profile" />,
+  //   icon: "profile",
   // },
 ];
 
@@ -61,7 +61,10 @@ const Sidebar: React.FC<ISidebarProps> = (props) => {
                     height={24}
                     width={24}
                   /> */}
-                  {item.icon}
+                  <RsIcon
+                    type={item.icon}
+                    fill={pathname !== item.slug && "#4B5563"}
+                  />
                 </div>
                 <p
                   className={twMerge(
