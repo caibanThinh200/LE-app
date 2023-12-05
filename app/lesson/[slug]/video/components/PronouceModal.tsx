@@ -138,6 +138,7 @@ const Pronounce: React.FC<IPronounceProps> = ({
         setWordDetail(pronunciation_result.detailResult.Words);
         setHasResult(true);
         setAllowRecord(false);
+        setAnimationLoading(false);
         (recognizer.current as sdk.SpeechRecognizer).close();
       };
 
@@ -365,15 +366,14 @@ const Pronounce: React.FC<IPronounceProps> = ({
                   onClick={(e) => {
                     e.stopPropagation();
                     setAnimationLoading(true);
-                    setTimeout(() => {
-                      setAllowRecord(true);
-                      setAnimationLoading(false);
-                    }, 3000);
+                    setAllowRecord(true);
                   }}
                   type="primary"
                 >
                   <RsIcon type="microphone" />
-                  {allowRecord ? 'Hệ thống đang thu âm, hãy đọc mẫu câu trên' : 'Chọn để nói'}
+                  {allowRecord
+                    ? "Hệ thống đang thu âm, hãy đọc mẫu câu trên"
+                    : "Chọn để nói"}
                 </Button>
               </div>
             </div>
@@ -451,11 +451,12 @@ const Pronounce: React.FC<IPronounceProps> = ({
             </div>
           )
         ) : (
-          <Lottie
-            animationData={loading}
-            className="w-[400px]"
-            loop={true}
-          />
+          <div className="flex flex-col items-center gap-6">
+            <p className="font-bold text-lg text-independence text-center mx-auto">
+              {currentPronounce?.paragraph}
+            </p>
+            <Lottie animationData={loading} className="w-[400px]" loop={true} />
+          </div>
         )}
       </div>
     </div>
