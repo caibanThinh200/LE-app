@@ -348,7 +348,7 @@ const Pronounce: React.FC<IPronounceProps> = ({
     >
       <div
         className={twMerge(
-          "min-h-[200px] h-fit p-5 px-10 rounded-xl bg-white relative z-[100]",
+          "h-[420px] p-5 px-10 rounded-xl bg-white relative z-[100]",
           !!currentPronounce ? "animate-fadeIn" : "animate-fadeOut"
         )}
       >
@@ -356,9 +356,11 @@ const Pronounce: React.FC<IPronounceProps> = ({
           currentPronounce && averageScore === 0 ? (
             <div className="flex flex-col justify-between min-h-[inherit]">
               <div className="flex-1 flex flex-col justify-center">
-                <p className="font-bold text-lg text-independence text-center mx-auto">
-                  {currentPronounce?.paragraph}
-                </p>
+                <div className="h-[300px] flex items-center justify-center">
+                  <p className="font-bold text-lg text-independence text-center mx-auto">
+                    {currentPronounce?.paragraph}
+                  </p>
+                </div>
               </div>
               <div className="p-4 flex w-full justify-center">
                 <Button
@@ -389,12 +391,12 @@ const Pronounce: React.FC<IPronounceProps> = ({
                   {averageScore > 50 ? "Tốt lắm 🥰" : "Bạn cần cố gắng thêm 😟"}
                 </p>
               </div>
-              <div className="border border-primary-green rounded-xl p-6 py-10 bg-gradient-green-3">
+              <div className="border border-primary-green rounded-xl p-6 py-5 bg-gradient-green-3">
                 <div className="gap-8 flex items-center">
                   <div className="text-primary-green text-2xl font-bold w-1/2">
                     {currentPronounce?.paragraph}
                   </div>
-                  <div className="w-1/2 relative flex flex-col gap-0">
+                  <div className="w-1/3 relative flex flex-col gap-0">
                     <div className="relative">
                       <p className="text-[28px] text-independence absolute font-bold top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                         {averageScore}%
