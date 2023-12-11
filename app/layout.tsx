@@ -8,6 +8,7 @@ import { twMerge } from "tailwind-merge";
 import { usePathname } from "next/navigation";
 import { Chart, ArcElement } from "chart.js";
 import 'react-tooltip/dist/react-tooltip.css'
+import 'regenerator-runtime/runtime'
 Chart.register(ArcElement);
 
 const inter = Inter({ subsets: ["latin"] });

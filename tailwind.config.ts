@@ -10,10 +10,33 @@ const config: Config = {
   theme: {
     extend: {
       animation: {
+        appearFromRight: "appearFromRight 0.25s ease-in-out forwards",
+        fadeToLeft: "fadeToLeft 0.25s ease-in-out forwards",
         fadeIn: "fadeIn 1s ease-in-out forwards",
         fadeOut: "fadeOut 1s ease-in-out forwards",
       },
       keyframes: {
+        appearFromRight: {
+          from: {
+            opacity: '0',
+            transform: 'translateX(-200px)'
+            // transform: 'translateX(100px)'
+          },
+          to: {
+            opacity: '1',
+            transform: 'translateX(0)'
+          }
+        },
+        fadeToLeft: {
+          from: {
+            opacity: '1',
+            // transform: 'translateX(100px)'
+          },
+          to: {
+            opacity: '0',
+            transform: 'translateX(100px)'
+          }
+        },
         fadeIn: {
           from: {
             opacity: "0",
@@ -74,6 +97,7 @@ const config: Config = {
     },
   },
   plugins: [
+    require("tailwindcss-animation-delay"),
     plugin(({ addUtilities }) => {
       addUtilities({
         ".overflow-overlay": {

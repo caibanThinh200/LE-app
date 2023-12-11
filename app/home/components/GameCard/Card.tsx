@@ -1,6 +1,7 @@
 import Button from "@/app/components/Button";
 import RsIcon from "@/app/components/Icon";
 import Image from "next/image";
+import Link from "next/link";
 
 interface ICardProps {}
 
@@ -8,7 +9,13 @@ const Card: React.FC<ICardProps> = (props) => {
   return (
     <div className="rounded-xl overflow-hidden drop-shadow-lg">
       <div className="h-[240px] w-full">
-        <Image className="h-full w-full object-cover" alt="thumb" width={430} height={240} src={"/images/BGUI.png"} />
+        <Image
+          className="h-full w-full object-cover"
+          alt="thumb"
+          width={430}
+          height={240}
+          src={"/images/BGUI.png"}
+        />
       </div>
       <div className="py-3 px-6 bg-white">
         <div className="flex justify-between items-center gap-6">
@@ -20,7 +27,11 @@ const Card: React.FC<ICardProps> = (props) => {
             </p>
           </div>
           <div className="w-1/2">
-            <Button className="px-6 w-full" type="primary">Chơi ngay</Button>
+            <Link href={"/game/flash-card"}>
+              <Button className="px-6 w-full" type="primary">
+                Chơi ngay
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

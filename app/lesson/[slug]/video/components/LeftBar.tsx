@@ -62,7 +62,7 @@ const LeftBar: React.FC<ILeftBarProps> = (props) => {
     }),
     []
   );
-  console.log(props.listPronouce);
+
   return (
     <div
       style={{

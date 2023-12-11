@@ -2,7 +2,6 @@
 
 import RsIcon from "@/app/components/Icon";
 import { convertTimeToSeconds, secondsToHms } from "@/app/util/function";
-import Image from "next/image";
 import React, {
   useState,
   useRef,

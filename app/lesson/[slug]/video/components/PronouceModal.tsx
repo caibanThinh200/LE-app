@@ -163,7 +163,6 @@ const Pronounce: React.FC<IPronounceProps> = ({
       (recognizer.current as sdk.SpeechRecognizer).recognizeOnceAsync(function (
         successfulResult
       ) {
-        // console.log(successfulResult);
         onRecognizedResult(successfulResult);
       });
 
@@ -179,7 +178,6 @@ const Pronounce: React.FC<IPronounceProps> = ({
       (
         recognizer.current as sdk.SpeechRecognizer
       ).startContinuousRecognitionAsync(() => {
-        console.log("Speech recognition started.");
         setIsListening(true);
       });
 
