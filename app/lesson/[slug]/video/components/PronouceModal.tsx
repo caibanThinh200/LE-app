@@ -49,6 +49,10 @@ interface WordResult {
   }[];
 }
 
+const errorType = {
+  Mispronunciation: "Chưa chuẩn xác",
+};
+
 const SPEECH_KEY = "afc6b1de18844a51a7e0bb13d06a26a7";
 const SPEECH_REGION = "eastus";
 const initialScore = {
@@ -81,28 +85,29 @@ const Pronounce: React.FC<IPronounceProps> = ({
       (speechConfig.current as sdk.SpeechConfig).speechRecognitionLanguage =
         "en-US";
 
+      const pronunciationAssessmentConfig =
+        new sdk.PronunciationAssessmentConfig(
+          currentPronounce?.paragraph || "",
+          sdk.PronunciationAssessmentGradingSystem.HundredMark,
+          sdk.PronunciationAssessmentGranularity.Phoneme,
+          false
+        );
+
       audioConfig.current = sdk.AudioConfig.fromDefaultMicrophoneInput();
       (recognizer.current as sdk.SpeechRecognizer) = new sdk.SpeechRecognizer(
         speechConfig.current as sdk.SpeechConfig,
         audioConfig.current
       );
       // create pronunciation assessment config, set grading system, granularity and if enable miscue based on your requirement.
-      const pronunciationAssessmentConfig =
-        new sdk.PronunciationAssessmentConfig(
-          currentPronounce?.paragraph || "",
-          sdk.PronunciationAssessmentGradingSystem.HundredMark,
-          sdk.PronunciationAssessmentGranularity.Phoneme,
-          true
-        );
-
       pronunciationAssessmentConfig.applyTo(
         recognizer.current as sdk.SpeechRecognizer
       );
 
       const onRecognizedResult = (result: sdk.SpeechRecognitionResult) => {
-        //   console.log("pronunciation assessment for: ", result.text);
+        console.log(result.text);
         var pronunciation_result =
           sdk.PronunciationAssessmentResult.fromResult(result);
+        console.log(pronunciation_result.detailResult);
         setPronouciationScore({
           accuracy: pronunciation_result.accuracyScore,
           pronunciation: pronunciation_result.pronunciationScore,
@@ -111,9 +116,7 @@ const Pronounce: React.FC<IPronounceProps> = ({
         });
         setCurrentPronounce({
           ...currentPronounce,
-          pronouceParagraph: pronunciation_result.detailResult.Words.map(
-            (word) => word.Word
-          ).join(" "),
+          pronouceParagraph: result.text,
           score: {
             accuracy: pronunciation_result.accuracyScore,
             pronunciation: pronunciation_result.pronunciationScore,
@@ -222,20 +225,20 @@ const Pronounce: React.FC<IPronounceProps> = ({
   const getColorByPoint = useCallback((point: number) => {
     let colorClass = "";
     switch (true) {
-      case point <= 100 && point >= 80: {
-        colorClass = "text-primary-green";
+      case point <= 100 && point >= 60: {
+        colorClass = "underline text-primary-green";
         break;
       }
-      case point < 80 && point >= 60: {
-        colorClass = "text-yellow-600";
+      case point < 60 && point >= 30: {
+        colorClass = "underline text-yellow-600";
         break;
       }
-      case point < 60: {
-        colorClass = "text-red-600";
+      case point < 30: {
+        colorClass = "underline text-red-600";
         break;
       }
       default:
-        colorClass = "text-primary-green";
+        colorClass = "underline text-primary-green";
     }
 
     return colorClass;
@@ -291,54 +294,9 @@ const Pronounce: React.FC<IPronounceProps> = ({
     fluency: "Vần điệu",
   };
 
-  // const accuracyData = {
-  //   labels: ["Accuracy"],
-  //   datasets: [
-  //     {
-  //       data: [pronouciationScore.accuracy, 100 - pronouciationScore.accuracy],
-  //       backgroundColor: ["#FF5733", "#EEEEEE"],
-  //     },
-  //   ],
-  // };
-
-  // const fluencyData = {
-  //   labels: ["Fluency"],
-  //   datasets: [
-  //     {
-  //       data: [pronouciationScore.fluency, 100 - pronouciationScore.fluency],
-  //       backgroundColor: ["#54AB72", "#EEEEEE"],
-  //     },
-  //   ],
-  // };
-
-  // const completenessData = {
-  //   labels: ["Completeness"],
-  //   datasets: [
-  //     {
-  //       data: [
-  //         pronouciationScore.completeness,
-  //         100 - pronouciationScore.completeness,
-  //       ],
-  //       backgroundColor: ["#0F172A", "#EEEEEE"],
-  //     },
-  //   ],
-  // };
-
-  // const pronunciationData = {
-  //   labels: ["Pronunciation"],
-  //   datasets: [
-  //     {
-  //       data: [
-  //         pronouciationScore.pronunciation,
-  //         100 - pronouciationScore.pronunciation,
-  //       ],
-  //       backgroundColor: ["#3F83F8", "#EEEEEE"],
-  //     },
-  //   ],
-  // };
   return (
     <div
-      onClick={(e) => setCurrentPronounce(undefined)}
+      // onClick={(e) => setCurrentPronounce(undefined)}
       className={twMerge(
         "absolute bg-black/80 top-0 delay-500 left-0 transition-all w-full h-full flex justify-center items-center",
         !!currentPronounce ? "opacity-100 z-50" : "opacity-0 -z-10"
@@ -346,7 +304,7 @@ const Pronounce: React.FC<IPronounceProps> = ({
     >
       <div
         className={twMerge(
-          "h-[420px] p-5 px-10 rounded-xl bg-white relative z-[100]",
+          "h-[420px] min-w-[520px] p-5 px-10 rounded-xl bg-white relative z-[100]",
           !!currentPronounce ? "animate-fadeIn" : "animate-fadeOut"
         )}
       >
@@ -391,16 +349,115 @@ const Pronounce: React.FC<IPronounceProps> = ({
               </div>
               <div className="border border-primary-green rounded-xl p-6 py-5 bg-gradient-green-3">
                 <div className="gap-8 flex items-center">
-                  <div className="text-primary-green text-2xl font-bold w-1/2">
-                    {currentPronounce?.paragraph}
+                  <div className="w-1/2">
+                    <p className="text-primary-green text-2xl font-bold w-full">
+                      {currentPronounce.paragraph
+                        .split(" ")
+                        .map((text, index) => {
+                          if (
+                            wordDetail
+                              .map((w) => w.Word.toLowerCase())
+                              .includes(text.toLowerCase())
+                          ) {
+                            const w = wordDetail.find(
+                              (word) =>
+                                word.Word.toLocaleLowerCase() ===
+                                text.toLowerCase()
+                            ) as WordResult;
+                            return (
+                              <span
+                                id={`word-${index}`}
+                                key={index}
+                                className={getColorByPoint(
+                                  w.PronunciationAssessment
+                                    ?.AccuracyScore as number
+                                )}
+                              >
+                                {w.Word}{" "}
+                                <Tooltip
+                                  anchorSelect={`#word-${index}`}
+                                  place="top"
+                                >
+                                  <div className="flex flex-col gap-2">
+                                    <p>
+                                      Điểm:{" "}
+                                      {w.PronunciationAssessment?.AccuracyScore}
+                                    </p>
+                                    {w.PronunciationAssessment?.ErrorType !==
+                                      "None" && (
+                                      <p>
+                                        Lỗi:{" "}
+                                        {
+                                          errorType[
+                                            w.PronunciationAssessment
+                                              ?.ErrorType as "Mispronunciation"
+                                          ]
+                                        }
+                                      </p>
+                                    )}
+                                  </div>
+                                </Tooltip>
+                                {" "}
+                              </span>
+                            );
+                          } else {
+                            return (
+                              <span
+                                id={`word-${index}`}
+                                className="underline text-red-600"
+                                key={index}
+                              >
+                                {text}
+                                <Tooltip
+                                  anchorSelect={`#word-${index}`}
+                                  place="top"
+                                >
+                                  <p className="text-sm font-light">Từ này chưa được phát âm</p>
+                                </Tooltip>
+                                {" "}
+                              </span>
+                            );
+                          }
+                        })}
+                      {/* {wordDetail.map((w, index) => (
+                        <span
+                          id={`word-${index}`}
+                          key={index}
+                          className={getColorByPoint(
+                            w.PronunciationAssessment?.AccuracyScore as number
+                          )}
+                        >
+                          {w.Word}{" "}
+                          <Tooltip anchorSelect={`#word-${index}`} place="top">
+                            <div className="flex flex-col gap-2">
+                              <p>
+                                Điểm: {w.PronunciationAssessment?.AccuracyScore}
+                              </p>
+                              {w.PronunciationAssessment?.ErrorType !==
+                                "None" && (
+                                <p>
+                                  Lỗi:{" "}
+                                  {
+                                    errorType[
+                                      w.PronunciationAssessment
+                                        ?.ErrorType as "Mispronunciation"
+                                    ]
+                                  }
+                                </p>
+                              )}
+                            </div>
+                          </Tooltip>
+                        </span>
+                      ))} */}
+                    </p>
                   </div>
                   <div className="w-1/3 relative flex flex-col gap-0">
                     <div className="relative">
-                      <p className="text-[28px] text-independence absolute font-bold top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                      <p className="text-[24px] text-independence absolute font-bold top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                         {averageScore}%
                       </p>
                       <Doughnut
-                        className="scale-75"
+                        className="w-full"
                         data={averageData}
                         options={options}
                       />

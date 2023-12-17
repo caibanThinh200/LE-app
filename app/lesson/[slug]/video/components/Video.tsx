@@ -128,12 +128,12 @@ const VideoAssessment: FunctionComponent<VideoPlayerProps> = ({
       <video
         ref={videoRef}
         src={src}
-        className="w-full h-full object-cover cursor-pointer"
+        className="w-full h-full object-cover cursor-pointer rounded-2xl"
         onClick={handlePlayPause}
         onTimeUpdate={handleTimeUpdate}
       />
 
-      <div className="absolute bottom-0 left-0 right-0 bg-opacity-50 bg-black p-3 opacity-0 group-hover:opacity-100 transition-all duration-500">
+      <div className="absolute bottom-0 left-0 right-0 bg-opacity-50 bg-black p-3 opacity-0 group-hover:opacity-100 transition-all duration-500 rounded-b-2xl">
         <div>
           <input
             type="range"
@@ -196,14 +196,18 @@ const VideoAssessment: FunctionComponent<VideoPlayerProps> = ({
           </button>
         </div>
       </div>
-      <Pronounce
-        videoRef={videoRef}
-        currentPronounce={currentPronounce as Pronouce}
-        handleContinue={handleContinue}
-        setCurrentPronounce={
-          setCurrentPronounce as Dispatch<SetStateAction<Pronouce | undefined>>
-        }
-      />
+      {currentPronounce && (
+        <Pronounce
+          videoRef={videoRef}
+          currentPronounce={currentPronounce as Pronouce}
+          handleContinue={handleContinue}
+          setCurrentPronounce={
+            setCurrentPronounce as Dispatch<
+              SetStateAction<Pronouce | undefined>
+            >
+          }
+        />
+      )}
     </div>
   );
 };

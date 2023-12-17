@@ -3,7 +3,10 @@ import RsIcon from "@/app/components/Icon";
 import Image from "next/image";
 import Link from "next/link";
 
-interface ICardProps {}
+interface ICardProps {
+  title: string;
+  url: string;
+}
 
 const Card: React.FC<ICardProps> = (props) => {
   return (
@@ -20,14 +23,14 @@ const Card: React.FC<ICardProps> = (props) => {
       <div className="py-3 px-6 bg-white">
         <div className="flex justify-between items-center gap-6">
           <div className="w-1/2">
-            <p className="font-bold text-independence">Nhìn hình đoán chữ</p>
+            <p className="font-bold text-independence">{props.title}</p>
             <p className="flex gap-2 items-center text-independence">
               <RsIcon type="group-user" />
               <span>Đã có 100 người đã chơi</span>
             </p>
           </div>
           <div className="w-1/2">
-            <Link href={"/game/flash-card"}>
+            <Link href={props.url}>
               <Button className="px-6 w-full" type="primary">
                 Chơi ngay
               </Button>
