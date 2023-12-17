@@ -79,118 +79,122 @@ const Pronounce: React.FC<IPronounceProps> = ({
   const [animationLoading, setAnimationLoading] = useState(false);
 
   useEffect(() => {
-    if (currentPronounce && allowRecord) {
-      (speechConfig.current as sdk.SpeechConfig) =
-        sdk.SpeechConfig.fromSubscription(SPEECH_KEY, SPEECH_REGION);
-      (speechConfig.current as sdk.SpeechConfig).speechRecognitionLanguage =
-        "en-US";
+    if (allowRecord) {
+      try {
+        (speechConfig.current as sdk.SpeechConfig) =
+          sdk.SpeechConfig.fromSubscription(SPEECH_KEY, SPEECH_REGION);
+        (speechConfig.current as sdk.SpeechConfig).speechRecognitionLanguage =
+          "en-US";
 
-      const pronunciationAssessmentConfig =
-        new sdk.PronunciationAssessmentConfig(
-          currentPronounce?.paragraph || "",
-          sdk.PronunciationAssessmentGradingSystem.HundredMark,
-          sdk.PronunciationAssessmentGranularity.Phoneme,
-          false
+        audioConfig.current = sdk.AudioConfig.fromDefaultMicrophoneInput();
+        (recognizer.current as sdk.SpeechRecognizer) = new sdk.SpeechRecognizer(
+          speechConfig.current as sdk.SpeechConfig,
+          audioConfig.current
         );
 
-      audioConfig.current = sdk.AudioConfig.fromDefaultMicrophoneInput();
-      (recognizer.current as sdk.SpeechRecognizer) = new sdk.SpeechRecognizer(
-        speechConfig.current as sdk.SpeechConfig,
-        audioConfig.current
-      );
-      // create pronunciation assessment config, set grading system, granularity and if enable miscue based on your requirement.
-      pronunciationAssessmentConfig.applyTo(
-        recognizer.current as sdk.SpeechRecognizer
-      );
+        const pronunciationAssessmentConfig =
+          new sdk.PronunciationAssessmentConfig(
+            currentPronounce?.paragraph || "",
+            sdk.PronunciationAssessmentGradingSystem.HundredMark,
+            sdk.PronunciationAssessmentGranularity.Phoneme,
+            true
+          );
 
-      const onRecognizedResult = (result: sdk.SpeechRecognitionResult) => {
-        console.log(result.text);
-        var pronunciation_result =
-          sdk.PronunciationAssessmentResult.fromResult(result);
-        console.log(pronunciation_result.detailResult);
-        setPronouciationScore({
-          accuracy: pronunciation_result.accuracyScore,
-          pronunciation: pronunciation_result.pronunciationScore,
-          completeness: pronunciation_result.completenessScore,
-          fluency: pronunciation_result.fluencyScore,
-        });
-        setCurrentPronounce({
-          ...currentPronounce,
-          pronouceParagraph: result.text,
-          score: {
+        // create pronunciation assessment config, set grading system, granularity and if enable miscue based on your requirement.
+        pronunciationAssessmentConfig.applyTo(
+          recognizer.current as sdk.SpeechRecognizer
+        );
+
+        const onRecognizedResult = (result: sdk.SpeechRecognitionResult) => {
+          // console.log(result.text);
+          var pronunciation_result =
+            sdk.PronunciationAssessmentResult.fromResult(result);
+          setPronouciationScore({
             accuracy: pronunciation_result.accuracyScore,
             pronunciation: pronunciation_result.pronunciationScore,
             completeness: pronunciation_result.completenessScore,
             fluency: pronunciation_result.fluencyScore,
-            average:
-              Object.keys(
-                pronunciation_result.detailResult.PronunciationAssessment
-              ).reduce(
-                (prev, current) =>
-                  prev +
-                  pronunciation_result.detailResult.PronunciationAssessment[
-                    current as "AccuracyScore"
-                  ],
-                0
-              ) /
-              Object.keys(
-                pronunciation_result.detailResult.PronunciationAssessment
-              ).length,
-          },
-        });
-        setWordDetail(pronunciation_result.detailResult.Words);
-        setHasResult(true);
-        setAllowRecord(false);
-        setAnimationLoading(false);
-        (recognizer.current as sdk.SpeechRecognizer).close();
-      };
+          });
+          setCurrentPronounce({
+            ...currentPronounce,
+            pronouceParagraph: result.text,
+            score: {
+              accuracy: pronunciation_result.accuracyScore,
+              pronunciation: pronunciation_result.pronunciationScore,
+              completeness: pronunciation_result.completenessScore,
+              fluency: pronunciation_result.fluencyScore,
+              average:
+                Object.keys(
+                  pronunciation_result.detailResult.PronunciationAssessment
+                ).reduce(
+                  (prev, current) =>
+                    prev +
+                    pronunciation_result.detailResult.PronunciationAssessment[
+                      current as "AccuracyScore"
+                    ],
+                  0
+                ) /
+                Object.keys(
+                  pronunciation_result.detailResult.PronunciationAssessment
+                ).length,
+            },
+          });
+          setWordDetail(pronunciation_result.detailResult.Words);
+          setHasResult(true);
+          setAllowRecord(false);
+          setAnimationLoading(false);
+          (recognizer.current as sdk.SpeechRecognizer).close();
+        };
 
-      const processRecognizedTranscript = (
-        event: sdk.SpeechRecognitionEventArgs
-      ) => {
-        const result = event.result;
-        onRecognizedResult(result);
-      };
+        const processRecognizedTranscript = (
+          event: sdk.SpeechRecognitionEventArgs
+        ) => {
+          const result = event.result;
+          onRecognizedResult(result);
+        };
 
-      const processRecognizingTranscript = (event: any) => {
-        const result = event.result;
-        // console.log("Recognition result:", result);
-        if (result.reason === sdk.ResultReason.RecognizingSpeech) {
-          const transcript = result.text;
-          // console.log("Transcript: -->", transcript);
-          // Call a function to process the transcript as needed
+        const processRecognizingTranscript = (event: any) => {
+          const result = event.result;
+          // console.log("Recognition result:", result);
+          if (result.reason === sdk.ResultReason.RecognizingSpeech) {
+            const transcript = result.text;
+            console.log("Transcript: -->", transcript);
+            // Call a function to process the transcript as needed
 
-          // setRecTranscript(transcript);
-        }
-      };
-      (recognizer.current as sdk.SpeechRecognizer).recognizeOnceAsync(function (
-        successfulResult
-      ) {
-        onRecognizedResult(successfulResult);
-      });
+            // setRecTranscript(transcript);
+          }
+        };
+        (recognizer.current as sdk.SpeechRecognizer).recognizeOnceAsync(
+          function (successfulResult) {
+            onRecognizedResult(successfulResult);
+          }
+        );
 
-      (recognizer.current as sdk.SpeechRecognizer).recognized = (s, e) =>
-        processRecognizedTranscript(e);
-      // {
-      //     console.log(e.result.text);
-      // }
+        (recognizer.current as sdk.SpeechRecognizer).recognized = (s, e) =>
+          processRecognizedTranscript(e);
+        // {
+        //     console.log(e.result.text);
+        // }
 
-      (recognizer.current as sdk.SpeechRecognizer).recognizing = (s, e) =>
-        processRecognizingTranscript(e);
+        (recognizer.current as sdk.SpeechRecognizer).recognizing = (s, e) =>
+          processRecognizingTranscript(e);
 
-      (
-        recognizer.current as sdk.SpeechRecognizer
-      ).startContinuousRecognitionAsync(() => {
-        setIsListening(true);
-      });
-
-      return () => {
         (
           recognizer.current as sdk.SpeechRecognizer
-        ).stopContinuousRecognitionAsync(() => {
-          setIsListening(false);
+        ).startContinuousRecognitionAsync(() => {
+          setIsListening(true);
         });
-      };
+
+        return () => {
+          (
+            recognizer.current as sdk.SpeechRecognizer
+          ).stopContinuousRecognitionAsync(() => {
+            setIsListening(false);
+          });
+        };
+      } catch (e) {
+        console.log(e);
+      }
     }
   }, [currentPronounce, setCurrentPronounce, allowRecord]);
 
@@ -396,8 +400,7 @@ const Pronounce: React.FC<IPronounceProps> = ({
                                       </p>
                                     )}
                                   </div>
-                                </Tooltip>
-                                {" "}
+                                </Tooltip>{" "}
                               </span>
                             );
                           } else {
@@ -412,9 +415,10 @@ const Pronounce: React.FC<IPronounceProps> = ({
                                   anchorSelect={`#word-${index}`}
                                   place="top"
                                 >
-                                  <p className="text-sm font-light">Từ này chưa được phát âm</p>
-                                </Tooltip>
-                                {" "}
+                                  <p className="text-sm font-light">
+                                    Từ này chưa được phát âm
+                                  </p>
+                                </Tooltip>{" "}
                               </span>
                             );
                           }

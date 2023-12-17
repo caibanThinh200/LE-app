@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import 'regenerator-runtime/runtime'
 import GameSreen from "../components/GameScreen";
 import ScoreBoard from "../components/ScoreBoard";
 
