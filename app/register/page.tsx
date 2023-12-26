@@ -1,7 +1,7 @@
-import RegisterScreen from "../components/Screen/Register";
+import RegisterOfficialUser from "../components/Screen/RegisterOfficialUser";
 
 const Page = () => {
-  return <RegisterScreen />;
+  return <RegisterOfficialUser />;
 };
 
 export default Page;

@@ -34,6 +34,7 @@ import CaretRight from "./CaretRight";
 import Reload from "./Reload";
 import Checked from "./Checked";
 import CloseWithCircle from "./CloseWithCircle";
+import SuccessCheck from "./SuccessCheck";
 
 interface IconProps extends React.HTMLProps<any> {
   type: string;
@@ -63,7 +64,8 @@ const RsIcon: React.FC<IconProps> = (props) => {
       microphone: <Microphone {...props} />,
       reload: <Reload {...props} />,
       checked: <Checked {...props} />,
-      'close-with-circle': <CloseWithCircle {...props} />,
+      "success-check": <SuccessCheck {...props} />,
+      "close-with-circle": <CloseWithCircle {...props} />,
       "caret-right": <CaretRight {...props} />,
       "zoom-full": <ZoomFull {...props} />,
       "speaker-mute": <SpeakerMute {...props} />,

@@ -7,13 +7,13 @@ import Header from "./components/Header";
 import { twMerge } from "tailwind-merge";
 import { usePathname } from "next/navigation";
 import { Chart, ArcElement } from "chart.js";
-import 'react-tooltip/dist/react-tooltip.css'
-import 'regenerator-runtime/runtime'
+import "react-tooltip/dist/react-tooltip.css";
+import "regenerator-runtime/runtime";
 Chart.register(ArcElement);
 
 const inter = Inter({ subsets: ["latin"] });
 
-const onBoardSlug = ["/", "/login", "/register", "/assessment"];
+const onBoardSlug = ["/", "/login", "/onboard", "/register", "/assessment"];
 
 export default function RootLayout({
   children,

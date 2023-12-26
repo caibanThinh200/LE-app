@@ -1,7 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import React, { HTMLProps, forwardRef, useCallback, useMemo, useState } from "react";
+import React, {
+  ForwardRefExoticComponent,
+  HTMLProps,
+  RefAttributes,
+  forwardRef,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
 import { twMerge } from "tailwind-merge";
 
 interface IValidateType {
@@ -13,9 +21,13 @@ interface IInputProps extends HTMLProps<HTMLInputElement> {
     type: string;
     message: string;
   } | null;
+  onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
 }
 
-const Input: React.FC<IInputProps> = (props) => {
+const Input: ForwardRefExoticComponent<
+  Omit<IInputProps, "ref"> & RefAttributes<HTMLInputElement>
+  // eslint-disable-next-line react/display-name
+> = React.forwardRef(function (props, ref) {
   const [value, setValue] = useState<string>("");
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -36,8 +48,9 @@ const Input: React.FC<IInputProps> = (props) => {
     >
       <input
         {...props}
+        ref={ref}
         type={!!passwordVisible ? "text" : "password"}
-        className="w-full outline-none"
+        className="w-full outline-none bg-inherit"
       />
       <Image
         onClick={() => setPasswordVisible(!passwordVisible)}
@@ -51,6 +64,7 @@ const Input: React.FC<IInputProps> = (props) => {
   ) : (
     <div>
       <input
+        ref={ref}
         className={twMerge(
           "py-2.5 px-4 border-2 rounded-full w-full border-plantinum outline-none",
           props.className,
@@ -63,6 +77,6 @@ const Input: React.FC<IInputProps> = (props) => {
       )}
     </div>
   );
-};
+});
 
 export default Input;

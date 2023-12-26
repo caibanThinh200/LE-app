@@ -69,16 +69,17 @@ const Header: React.FC<IHeaderProps> = (props) => {
             {/* <button className="py-2.5 px-5 border border-primary-green text-primary-green rounded-full hover:bg-primary-green hover:text-white transition-all duration-300">
               Đăng nhập
             </button> */}
-            <button className="group rounded-full border-2 text-independence hover:bg-primary-gradient hover:bg-clip-text hover:text-transparent  font-bold border-independence px-8 py-3 flex gap-2 items-center">
-              {/* Tải trên điện thoại */}
-              Đăng ký tài khoản
-              {/* <Image
+            <Link href={"/register"}>
+              <button className="group rounded-full border-2 text-independence hover:bg-primary-gradient hover:bg-clip-text hover:text-transparent  font-bold border-independence px-8 py-3 flex gap-2 items-center">
+                {/* Tải trên điện thoại */}
+                Đăng ký tài khoản
+                {/* <Image
                 src={"/svg/mobile-icon.svg"}
                 width={24}
                 height={24}
                 alt="mobile"
               /> */}
-              {/* <svg
+                {/* <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -97,7 +98,8 @@ const Header: React.FC<IHeaderProps> = (props) => {
                   fill="#374151"
                 />
               </svg> */}
-            </button>
+              </button>
+            </Link>
           </div>
         </div>
       </div>

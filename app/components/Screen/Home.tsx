@@ -29,7 +29,7 @@ const HomeScreen: React.FC<IHomeScreenProps> = (props) => {
             </div>
             <div className="flex flex-col gap-4">
               <Button
-                href="/register"
+                href="/onboard"
                 className="w-full hover:bg-primary-hover-gradient transition-all duration-300"
                 type="primary"
               >
