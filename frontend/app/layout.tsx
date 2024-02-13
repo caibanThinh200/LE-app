@@ -15,17 +15,11 @@ import Cookies from "js-cookie";
 import { useEffect } from "react";
 import AuthQuery from "./client/queries/auth";
 import Layout from "./components/Layout";
+import Script from "next/script";
+import { onBoardSlug } from "./constant";
 Chart.register(ArcElement);
 
 const inter = Inter({ subsets: ["latin"] });
-
-export const onBoardSlug = [
-  "/",
-  "/login",
-  "/onboard",
-  "/register",
-  "/assessment",
-];
 
 export default function RootLayout({
   children,
@@ -38,10 +32,10 @@ export default function RootLayout({
     <html className="h-fit min-h-screen" lang="en">
       <head>
         <title>Gia sư tài năng</title>
-        <script
+        <Script
           src="https://kit.fontawesome.com/7ddfa833b0.js"
           crossOrigin="anonymous"
-        ></script>
+        ></Script>
       </head>
       <body
         className={twMerge(

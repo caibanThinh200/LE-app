@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import AuthQuery from "../client/queries/auth";
 import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
-import { onBoardSlug } from "../layout";
+import { onBoardSlug } from "../constant";
 
 interface ILayoutProps {
   children: React.ReactNode;
