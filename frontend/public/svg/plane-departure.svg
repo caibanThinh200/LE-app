@@ -1,0 +1,11 @@
+<svg width="64" height="65" viewBox="0 0 64 65" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="icon / tabler-icons / plane-departure" clip-path="url(#clip0_673_20913)">
+<path id="Vector" d="M39.0355 28.0167L51.9145 24.5658C53.2808 24.1997 54.7365 24.3914 55.9615 25.0986C57.1865 25.8058 58.0804 26.9707 58.4465 28.337C58.8125 29.7033 58.6209 31.1591 57.9136 32.3841C57.2064 33.6091 56.0415 34.5029 54.6752 34.869L16.0382 45.2218L4.16967 31.8375L11.8971 29.767L18.4291 33.5382L26.1565 31.4676L16.1736 14.8174L23.901 12.7468L39.0355 28.0167Z" stroke="#FACC15" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_2" d="M8 56.6631H56" stroke="#FACC15" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<clipPath id="clip0_673_20913">
+<rect width="64" height="64" fill="white" transform="translate(0 0.663086)"/>
+</clipPath>
+</defs>
+</svg>
