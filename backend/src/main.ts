@@ -9,7 +9,7 @@ async function bootstrap() {
   app.setGlobalPrefix('/le/api/v1');
   app.enableCors({
     allowedHeaders: '*',
-    origin: [process.env.CLIENT_URL || 'https://le-app-navy.vercel.app'],
+    origin: ['https://le-app-navy.vercel.app'],
     credentials: true,
     // methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     // preflightContinue: false,
