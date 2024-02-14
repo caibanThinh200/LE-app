@@ -8,9 +8,9 @@ async function bootstrap() {
   // app.useStaticAssets(join(__dirname, '..', 'upload'));
   app.setGlobalPrefix('/le/api/v1');
   app.enableCors({
-    allowedHeaders: '*',
-    origin: ['https://le-app-navy.vercel.app'],
+    origin: [process.env.CLIENT_URL || 'https://le-app-navy.vercel.app'],
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
     // methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     // preflightContinue: false,
     // optionsSuccessStatus: 204,
