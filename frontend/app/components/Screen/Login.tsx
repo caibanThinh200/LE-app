@@ -29,7 +29,7 @@ const LoginScreen: React.FC<ILoginScreenProps> = (props) => {
   useEffect(() => {
     if (mutation.data?.access_token) {
       Cookies.set("auth_token", mutation.data?.access_token);
-      router.push("/home");
+      window.location.href = "/home";
     }
   }, [mutation]);
 

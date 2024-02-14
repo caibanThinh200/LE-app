@@ -16,7 +16,6 @@ const login = async (body: IUserDto) => {
 
 const checkUser = async () => {
   const user = await axiosClient.get("/auth/check-user");
-  console.log(user)
   return user;
 };
 

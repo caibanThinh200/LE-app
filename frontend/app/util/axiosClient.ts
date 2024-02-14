@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 const cookies = Cookies.get("auth_token");
 
 const axiosClient = axios.create({
-  baseURL: "http://localhost:8888/le/api/v1",
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/le/api/v1`,
   timeout: 1000,
   headers: {
     Accept: "application/json",

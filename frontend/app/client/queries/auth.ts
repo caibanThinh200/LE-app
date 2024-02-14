@@ -17,7 +17,11 @@ const Login = () => {
 };
 
 const CheckUser = () => {
-  const result = useQuery("check-user", AuthService.checkUser);
+  const result = useQuery({
+    queryKey: ["check-user"],
+    queryFn: AuthService.checkUser,
+    retry: false,
+  });
   return result;
 };
 

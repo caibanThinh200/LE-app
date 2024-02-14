@@ -17,6 +17,7 @@ const Layout: React.FC<ILayoutProps> = (props) => {
   const { data, isFetched, ...rest } = AuthQuery.CheckUser();
 
   useEffect(() => {
+
     if (
       isFetched &&
       !data?.data?._id &&
@@ -24,7 +25,7 @@ const Layout: React.FC<ILayoutProps> = (props) => {
     ) {
       router.push("/");
     }
-  }, [authToken, data]);
+  }, [authToken, data, isFetched]);
 
   return <div>{props.children}</div>;
 };
