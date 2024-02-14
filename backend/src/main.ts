@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import cors from 'cors';
+// import cors from 'cors';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
@@ -9,13 +9,13 @@ async function bootstrap() {
   app.setGlobalPrefix('/le/api/v1');
   app.enableCors({
     allowedHeaders: '*',
-    origin: [process.env.CLIENT_URL],
+    origin: [process.env.CLIENT_URL || 'https://le-app-navy.vercel.app'],
     credentials: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
+    // methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    // preflightContinue: false,
+    // optionsSuccessStatus: 204,
   });
-  app.use(cors());
+  // app.use(cors());
   await app.listen(8888);
 }
 bootstrap();
