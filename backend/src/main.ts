@@ -7,9 +7,12 @@ async function bootstrap() {
   // app.useStaticAssets(join(__dirname, '..', 'upload'));
   app.setGlobalPrefix('/le/api/v1');
   app.enableCors({
-    allowedHeaders: ['content-type'],
+    allowedHeaders: '*',
     origin: [process.env.CLIENT_URL],
     credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   });
   await app.listen(8888);
 }
