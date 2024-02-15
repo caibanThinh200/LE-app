@@ -8,7 +8,7 @@ const axiosClient = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_URL}/le/api/v1`,
   timeout: 1000,
   headers: {
-    Accept: "application/json",
+    // Accept: "application/json",
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
   },

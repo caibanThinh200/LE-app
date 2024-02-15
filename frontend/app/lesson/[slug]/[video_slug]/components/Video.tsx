@@ -127,7 +127,7 @@ const VideoAssessment: FunctionComponent<VideoPlayerProps> = ({
     <div className="relative rounded-xl overflow-visible group">
       <video
         ref={videoRef}
-        src={src}
+        src={src || "/mp4/dan-assessment.mp4"}
         className="w-full h-full object-cover cursor-pointer rounded-2xl"
         onClick={handlePlayPause}
         onTimeUpdate={handleTimeUpdate}
