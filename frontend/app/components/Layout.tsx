@@ -17,14 +17,13 @@ const Layout: React.FC<ILayoutProps> = (props) => {
   const { data, isFetched, ...rest } = AuthQuery.CheckUser();
 
   useEffect(() => {
-
-    // if (
-    //   isFetched &&
-    //   !data?.data?._id &&
-    //   !onBoardSlug.includes(pathname as string)
-    // ) {
-    //   router.push("/");
-    // }
+    if (
+      isFetched &&
+      !data?.data?._id &&
+      !onBoardSlug.includes(pathname as string)
+    ) {
+      router.push("/");
+    }
   }, [authToken, data, isFetched]);
 
   return <div>{props.children}</div>;
