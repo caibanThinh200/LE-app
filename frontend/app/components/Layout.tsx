@@ -18,13 +18,13 @@ const Layout: React.FC<ILayoutProps> = (props) => {
 
   useEffect(() => {
 
-    if (
-      isFetched &&
-      !data?.data?._id &&
-      !onBoardSlug.includes(pathname as string)
-    ) {
-      router.push("/");
-    }
+    // if (
+    //   isFetched &&
+    //   !data?.data?._id &&
+    //   !onBoardSlug.includes(pathname as string)
+    // ) {
+    //   router.push("/");
+    // }
   }, [authToken, data, isFetched]);
 
   return <div>{props.children}</div>;
