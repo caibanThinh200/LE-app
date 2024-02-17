@@ -8,8 +8,14 @@ import { usePathname, useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { twMerge } from "tailwind-merge";
 import Cookies from "js-cookie";
+import { motion } from "framer-motion";
 
 interface ISidebarProps {}
+
+const variants = {
+  open: { scale: 1 },
+  closed: { scale: 0 },
+};
 
 const MENU_ITEMS = [
   {
@@ -59,34 +65,38 @@ const Sidebar: React.FC<ISidebarProps> = (props) => {
           <div className="flex flex-col gap-4">
             {MENU_ITEMS.map((item, index) => (
               <Link
-                href={item.slug}
                 key={index}
-                className={twMerge(
-                  "py-3 px-6 gap-3 flex items-center rounded-full",
-                  pathname === item.slug &&
-                    "border border-primary-green bg-gradient-to-b from-white to-nyanza"
-                )}
+                href={item.slug}
+                className={twMerge("relative")}
               >
-                <div>
-                  {/* <Image
-                    src={item.icon}
-                    alt={item.title}
-                    height={24}
-                    width={24}
-                  /> */}
-                  <RsIcon
-                    type={item.icon}
-                    fill={pathname !== item.slug && "#4B5563"}
-                  />
+                {" "}
+                <motion.div
+                  animate={pathname === item.slug ? "open" : "closed"}
+                  variants={variants}
+                  className="absolute border border-primary-green bg-gradient-to-b from-white to-nyanz inset-0 rounded-full"
+                ></motion.div>
+                <div className="flex items-center relative z-10 py-3 px-6 gap-3 rounded-full">
+                  <div>
+                    {/* <Image
+                        src={item.icon}
+                        alt={item.title}
+                        height={24}
+                        width={24}
+                      /> */}
+                    <RsIcon
+                      type={item.icon}
+                      fill={pathname !== item.slug && "#4B5563"}
+                    />
+                  </div>
+                  <p
+                    className={twMerge(
+                      "text-independence font-bold",
+                      pathname === item.slug && "text-primary-green"
+                    )}
+                  >
+                    {item.title}
+                  </p>
                 </div>
-                <p
-                  className={twMerge(
-                    "text-independence font-bold",
-                    pathname === item.slug && "text-primary-green"
-                  )}
-                >
-                  {item.title}
-                </p>
               </Link>
             ))}
             <button

@@ -43,14 +43,8 @@ export default function RootLayout({
           "h-full min-h-screen bg-gradient-to-b from-white to-nyanza"
         )}
       >
-        <ReactQueryWrapper>
-          <ServerStateProvider>
-            <Layout>
-              {onBoardSlug.includes(pathname as string) && <Header />}
-              {children}
-            </Layout>
-          </ServerStateProvider>
-        </ReactQueryWrapper>
+        {onBoardSlug.includes(pathname as string) && <Header />}
+        {children}
       </body>
     </html>
   );

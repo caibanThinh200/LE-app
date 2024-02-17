@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useEffect } from "react";
 import AuthQuery from "../client/queries/auth";
 import Cookies from "js-cookie";
@@ -26,7 +27,21 @@ const Layout: React.FC<ILayoutProps> = (props) => {
     }
   }, [authToken, data, isFetched]);
 
-  return <div>{props.children}</div>;
+  return (
+    <motion.div
+      initial={{ y: 300, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: 300, opacity: 0 }}
+      transition={{
+        duration: 2,
+        type: "spring",
+        stiffness: 260,
+        damping: 20,
+      }}
+    >
+      {props.children}
+    </motion.div>
+  );
 };
 
 export default Layout;
