@@ -96,7 +96,10 @@ const LeftBar: React.FC<ILeftBarProps> = (props) => {
             </div>
             <div className="relative">
               <p className="text-[8px] text-independence absolute font-bold top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                {_.score?.average}%
+                {Math.round(
+                  ((_.score?.average as number) + Number.EPSILON) * 100
+                ) / 100}
+                %
               </p>
               <Doughnut
                 className="!h-[50px]"

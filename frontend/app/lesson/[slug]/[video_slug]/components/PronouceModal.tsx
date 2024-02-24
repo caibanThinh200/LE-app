@@ -20,7 +20,7 @@ import * as sdk from "microsoft-cognitiveservices-speech-sdk";
 import { Doughnut } from "react-chartjs-2";
 import { Tooltip } from "react-tooltip";
 import Lottie from "lottie-react";
-import * as loading from "../../../../../public/lottie/loading.json";
+import * as loading from "../../../../../public/lottie/loading-2.json";
 import { twMerge } from "tailwind-merge";
 
 interface IPronounceProps {
@@ -76,6 +76,9 @@ const Pronounce: React.FC<IPronounceProps> = ({
   const [hasResult, setHasResult] = useState(false);
   const [pronouciationScore, setPronouciationScore] = useState(initialScore);
   const [animationLoading, setAnimationLoading] = useState(false);
+  const correctAudio = new Audio("/mp3/correct.mp3");
+  const inCorrectAudio = new Audio("/mp3/incorrect.mp3");
+  const startRecordingAudio = new Audio("/mp3/start-record.mp3");
 
   useEffect(() => {
     (speechConfig.current as sdk.SpeechConfig) =
@@ -89,16 +92,20 @@ const Pronounce: React.FC<IPronounceProps> = ({
       audioConfig.current
     );
 
-    const pronunciationAssessmentConfig = new sdk.PronunciationAssessmentConfig(
-      currentPronounce?.paragraph || "",
-      sdk.PronunciationAssessmentGradingSystem.HundredMark,
-      sdk.PronunciationAssessmentGranularity.Phoneme,
-      true
-    );
-    // create pronunciation assessment config, set grading system, granularity and if enable miscue based on your requirement.
-    pronunciationAssessmentConfig.applyTo(
-      recognizer.current as sdk.SpeechRecognizer
-    );
+    if (currentPronounce.paragraph) {
+      const pronunciationAssessmentConfig =
+        new sdk.PronunciationAssessmentConfig(
+          currentPronounce?.paragraph,
+          sdk.PronunciationAssessmentGradingSystem.HundredMark,
+          sdk.PronunciationAssessmentGranularity.Phoneme,
+          true
+        );
+      pronunciationAssessmentConfig.enableProsodyAssessment = true;
+      // create pronunciation assessment config, set grading system, granularity and if enable miscue based on your requirement.
+      pronunciationAssessmentConfig.applyTo(
+        recognizer.current as sdk.SpeechRecognizer
+      );
+    }
     // handleOpenMic();
     return () => {
       (
@@ -114,8 +121,7 @@ const Pronounce: React.FC<IPronounceProps> = ({
   }, [hasResult]);
 
   const onRecognizedResult = (result: sdk.SpeechRecognitionResult) => {
-    // console.log(result.text);
-    var pronunciation_result =
+    let pronunciation_result =
       sdk.PronunciationAssessmentResult.fromResult(result);
     setPronouciationScore({
       accuracy: pronunciation_result.accuracyScore,
@@ -172,6 +178,7 @@ const Pronounce: React.FC<IPronounceProps> = ({
   };
 
   const handleOpenMic = () => {
+    startRecordingAudio.play();
     setAnimationLoading(true);
     (recognizer.current as sdk.SpeechRecognizer)?.recognizeOnceAsync(function (
       successfulResult
@@ -270,6 +277,7 @@ const Pronounce: React.FC<IPronounceProps> = ({
       score: initialScore,
       pronouceParagraph: "",
     });
+    setHasResult(false);
     setPronouciationScore(initialScore);
   };
 
@@ -289,6 +297,19 @@ const Pronounce: React.FC<IPronounceProps> = ({
     ],
   };
 
+  useEffect(() => {
+    if (hasResult) {
+      if (averageScore > 50) {
+        // setTimeout(() => {
+        //   handleContinue();
+        // }, 3000);
+        correctAudio.play();
+      } else {
+        inCorrectAudio.play();
+      }
+    }
+  }, [averageScore]);
+
   const pronounceLabel = {
     accuracy: "Chính xác",
     pronunciation: "Lưu loát",
@@ -306,7 +327,7 @@ const Pronounce: React.FC<IPronounceProps> = ({
     >
       <div
         className={twMerge(
-          "h-[420px] min-w-[520px] p-5 px-10 rounded-xl bg-white relative z-[100]",
+          "min-w-[420px] p-5 px-10 rounded-xl bg-ghost-white relative z-[100]",
           !!currentPronounce ? "animate-fadeIn" : "animate-fadeOut"
         )}
       >
@@ -343,7 +364,29 @@ const Pronounce: React.FC<IPronounceProps> = ({
             >
               <div className="text-center">
                 <p className="text-lg font-bold text-independence">
-                  {averageScore > 50 ? "Tốt lắm 🥰" : "Bạn cần cố gắng thêm 😟"}
+                  {averageScore > 50 ? (
+                    <div className="flex gap-0 items-center justify-center">
+                      <p className="text-xl"> Tốt lắm</p>
+                      <Image
+                        src={"/images/success.png"}
+                        className="w-[100px] h-[80px]"
+                        alt="success"
+                        width={200}
+                        height={200}
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex gap-0 items-center justify-center">
+                      <p>Bạn cần cố gắng thêm</p>
+                      <Image
+                        src={"/images/failed.png"}
+                        className="w-[100px] h-[80px]"
+                        alt="success"
+                        width={200}
+                        height={200}
+                      />
+                    </div>
+                  )}
                 </p>
               </div>
               <div className="border border-primary-green rounded-xl p-6 py-5 bg-gradient-green-3">
@@ -423,7 +466,9 @@ const Pronounce: React.FC<IPronounceProps> = ({
                   <div className="w-1/3 relative flex flex-col gap-0">
                     <div className="relative">
                       <p className="text-[24px] text-independence absolute font-bold top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                        {averageScore}%
+                        {Math.round((averageScore + Number.EPSILON) * 100) /
+                          100}
+                        %
                       </p>
                       <Doughnut
                         className="w-full"
@@ -452,7 +497,7 @@ const Pronounce: React.FC<IPronounceProps> = ({
                   </div>
                 </div>
               </div>
-              <div className="flex justify-center gap-2">
+              <div className={twMerge("flex justify-center gap-2")}>
                 <Button
                   className="flex gap-2 items-center bg-independence text-white font-bold"
                   type="primary"
@@ -485,11 +530,14 @@ const Pronounce: React.FC<IPronounceProps> = ({
             </div>
           )
         ) : (
-          <div className="flex flex-col items-center gap-6">
+          <div className="flex flex-col items-center gap-2">
             <p className="font-bold text-lg text-independence text-center mx-auto">
               {currentPronounce?.paragraph}
             </p>
-            <Lottie animationData={loading} className="w-[400px]" loop={true} />
+            <Lottie animationData={loading} className="w-[250px]" loop={true} />
+            <p className="text-independence text-center mx-auto">
+              Đang ghi nhận giọng nói...
+            </p>
           </div>
         )}
       </div>
