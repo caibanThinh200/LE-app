@@ -23,7 +23,7 @@ const Layout: React.FC<ILayoutProps> = (props) => {
       !data?.data?._id &&
       !onBoardSlug.includes(pathname as string)
     ) {
-      router.push("/");
+      // router.push("/");
     }
   }, [authToken, data, isFetched]);
 

@@ -6,13 +6,15 @@ const Pending: React.FC<ILessonCardProps> = (props) => {
   return (
     <div
       key={props.index}
-      className="rounded-xl text-independence border border-bright-gray p-6 bg-light-silver"
+      className="rounded-xl text-independence border border-bright-gray p-6 relative overflow-hidden"
     >
-      <div className="flex">
+      <div className="flex relative z-30">
         <div className="flex-2 flex flex-col gap-8">
           <div className="flex flex-col gap-4">
             <div>
-              <p className="font-bold">{props.section.title}</p>
+              <p className="font-bold text-independence">
+                {props.section.title}
+              </p>
             </div>
             <div className="flex gap-2 items-center">
               <div>
@@ -29,26 +31,30 @@ const Pending: React.FC<ILessonCardProps> = (props) => {
                   />
                 </svg>
               </div>
-              <p>20 bài</p>
+              <p className="text-independence">
+                {props.section?.assessments?.length} bài
+              </p>
             </div>
           </div>
           <div>
             <Link
               href={`/lesson/${props.section._id}`}
-              className="border border-primary-green rounded-full py-2 px-6 font-bold text-independence bg-white"
+              className="border bg-gradient-green-2 rounded-full py-3 px-6 font-bold text-white"
             >
-              Tiếp tục
+              Tham gia
             </Link>
           </div>
         </div>
-        <div className="flex-1 flex justify-center items-center">
-          <Image
-            src={props.section.logo?.fileName as string}
-            alt={props.section.logo?.fileName as string}
-            width={124}
-            height={124}
-          />
-        </div>
+      </div>
+      <div className="absolute inset-0 w-[70%] h-full z-10 from-white from-[70%] bg-gradient-to-r"></div>
+      <div className="absolute inset-0 w-full h-full">
+        <Image
+          className="w-full h-full object-cover object-center"
+          src={props.section.logo?.fileName as string}
+          alt={props.section.logo?.fileName as string}
+          width={100}
+          height={100}
+        />
       </div>
     </div>
   );

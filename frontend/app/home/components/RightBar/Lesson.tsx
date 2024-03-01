@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { IRightBarProps } from ".";
 
 const LessonRightBar: React.FC<IRightBarProps> = (props) => {
@@ -22,7 +23,7 @@ const LessonRightBar: React.FC<IRightBarProps> = (props) => {
           <p className="font-bold">Bài tập hôm nay</p>
         </div>
         <div className="flex flex-col gap-6">
-          {Array(4)
+          {Array(2)
             .fill("")
             .map((_, index) => (
               <div
@@ -49,7 +50,12 @@ const LessonRightBar: React.FC<IRightBarProps> = (props) => {
                   <p>0/10</p>
                 </div>
                 <div>
-                  <p className="bg-primary-gradient bg-clip-text text-transparent">Hoàn thành ngay</p>
+                  <Link
+                    href="/lesson/6559bc6dae730e15741c6202"
+                    className="bg-primary-gradient bg-clip-text text-transparent"
+                  >
+                    Hoàn thành ngay
+                  </Link>
                 </div>
               </div>
             ))}

@@ -99,13 +99,13 @@ const Sidebar: React.FC<ISidebarProps> = (props) => {
                 </div>
               </Link>
             ))}
-            <button
+            {/* <button
               onClick={handleLogout}
               className="py-3 px-6 gap-3 flex items-center"
             >
               <RsIcon type={"logout"} className="text-independence" />
               <p className="text-independence font-bold">Đăng xuất</p>
-            </button>
+            </button> */}
           </div>
         </div>
         <div>

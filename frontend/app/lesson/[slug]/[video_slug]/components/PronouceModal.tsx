@@ -15,7 +15,6 @@ import {
   useState,
 } from "react";
 import { Pronouce } from "./Video";
-import { SpeechToTextComponent } from "@/app/components/SpeechToText";
 import * as sdk from "microsoft-cognitiveservices-speech-sdk";
 import { Doughnut } from "react-chartjs-2";
 import { Tooltip } from "react-tooltip";
@@ -60,6 +59,7 @@ const initialScore = {
   pronunciation: 0,
   completeness: 0,
   fluency: 0,
+  prodosy: 0,
 };
 
 const Pronounce: React.FC<IPronounceProps> = ({
@@ -76,6 +76,7 @@ const Pronounce: React.FC<IPronounceProps> = ({
   const [hasResult, setHasResult] = useState(false);
   const [pronouciationScore, setPronouciationScore] = useState(initialScore);
   const [animationLoading, setAnimationLoading] = useState(false);
+
   const correctAudio = new Audio("/mp3/correct.mp3");
   const inCorrectAudio = new Audio("/mp3/incorrect.mp3");
   const startRecordingAudio = new Audio("/mp3/start-record.mp3");
@@ -85,13 +86,11 @@ const Pronounce: React.FC<IPronounceProps> = ({
       sdk.SpeechConfig.fromSubscription(SPEECH_KEY, SPEECH_REGION);
     (speechConfig.current as sdk.SpeechConfig).speechRecognitionLanguage =
       "en-US";
-
     audioConfig.current = sdk.AudioConfig.fromDefaultMicrophoneInput();
     (recognizer.current as sdk.SpeechRecognizer) = new sdk.SpeechRecognizer(
       speechConfig.current as sdk.SpeechConfig,
       audioConfig.current
     );
-
     if (currentPronounce.paragraph) {
       const pronunciationAssessmentConfig =
         new sdk.PronunciationAssessmentConfig(
@@ -128,6 +127,7 @@ const Pronounce: React.FC<IPronounceProps> = ({
       pronunciation: pronunciation_result.pronunciationScore,
       completeness: pronunciation_result.completenessScore,
       fluency: pronunciation_result.fluencyScore,
+      prodosy: pronunciation_result.prosodyScore,
     });
     setCurrentPronounce({
       ...currentPronounce,
@@ -170,10 +170,6 @@ const Pronounce: React.FC<IPronounceProps> = ({
     // console.log("Recognition result:", result);
     if (result.reason === sdk.ResultReason.RecognizingSpeech) {
       const transcript = result.text;
-      console.log("Transcript: -->", transcript);
-      // Call a function to process the transcript as needed
-
-      // setRecTranscript(transcript);
     }
   };
 
@@ -202,24 +198,24 @@ const Pronounce: React.FC<IPronounceProps> = ({
     });
   };
 
-  const pauseListening = () => {
-    setIsListening(false);
-    (
-      recognizer.current as sdk.SpeechRecognizer
-    ).stopContinuousRecognitionAsync();
-    console.log("Paused listening.");
-  };
+  // const pauseListening = () => {
+  //   setIsListening(false);
+  //   (
+  //     recognizer.current as sdk.SpeechRecognizer
+  //   ).stopContinuousRecognitionAsync();
+  //   console.log("Paused listening.");
+  // };
 
-  const resumeListening = () => {
-    if (!isListening) {
-      setIsListening(true);
-      (
-        recognizer.current as sdk.SpeechRecognizer
-      ).startContinuousRecognitionAsync(() => {
-        console.log("Resumed listening...");
-      });
-    }
-  };
+  // const resumeListening = () => {
+  //   if (!isListening) {
+  //     setIsListening(true);
+  //     (
+  //       recognizer.current as sdk.SpeechRecognizer
+  //     ).startContinuousRecognitionAsync(() => {
+  //       console.log("Resumed listening...");
+  //     });
+  //   }
+  // };
 
   const stopListening = () => {
     setIsListening(false);
@@ -315,6 +311,7 @@ const Pronounce: React.FC<IPronounceProps> = ({
     pronunciation: "Lưu loát",
     completeness: "Hoàn thiện",
     fluency: "Vần điệu",
+    prodosy: "Thi pháp",
   };
 
   return (
