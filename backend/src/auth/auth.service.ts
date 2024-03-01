@@ -8,6 +8,8 @@ import { UserService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { User } from 'schemas/user.schema';
+import { Model } from 'mongoose';
+import { Student } from 'schemas/student.schema';
 
 @Injectable()
 export class AuthService {
@@ -37,6 +39,31 @@ export class AuthService {
         HttpStatus.NOT_FOUND,
       );
     }
+  }
+
+  async checkUserExist(user: User) {
+    const { phoneNumber, username } = user;
+    const duplicate = await (
+      this[(user as User).type] as Model<Student>
+    ).findOne({
+      $or: [
+        {
+          'info.username': username,
+          'info.phoneNumber': phoneNumber,
+        },
+      ],
+    });
+
+    if (duplicate) {
+      throw new HttpException(
+        {
+          status: HttpStatus.CONFLICT,
+          error: 'User existed',
+        },
+        HttpStatus.CONFLICT,
+      );
+    }
+    return true;
   }
 
   async register(user: User) {
