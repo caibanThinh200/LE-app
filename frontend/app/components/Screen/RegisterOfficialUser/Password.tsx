@@ -40,11 +40,11 @@ const Password: React.FC<IPasswordProps> = (props) => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
-    if (
-      ((mutation.error as AxiosError)?.response?.data as any)?.status === 409
-    ) {
-      toast.error("Tên người dùng hoặc số điện thoại đã được sử dụng");
-    }
+    // if (
+    //   ((mutation.error as AxiosError)?.response?.data as any)?.status === 409
+    // ) {
+    //   toast.error("Tên người dùng hoặc số điện thoại đã được sử dụng");
+    // }
     setIsSuccess(!!mutation.data);
   }, [mutation]);
 

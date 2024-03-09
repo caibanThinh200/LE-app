@@ -4,7 +4,7 @@ import Image from "next/image";
 import Button from "../Button";
 import Input from "../Input";
 import { FieldValues, useForm } from "react-hook-form";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { useRouter } from "next/navigation";
 import AuthQuery from "@/app/client/queries/auth";
@@ -12,6 +12,8 @@ import { useMutation } from "react-query";
 import { IUserDto } from "@/app/interface/modules/user";
 import AuthService from "@/app/client/api/auth";
 import Cookies from "js-cookie";
+import { AxiosError } from "axios";
+import { toast } from "react-hot-toast";
 
 interface ILoginScreenProps {}
 
@@ -25,16 +27,25 @@ const LoginScreen: React.FC<ILoginScreenProps> = (props) => {
   const mutation = useMutation({
     mutationFn: (body: IUserDto) => AuthService.login(body),
   });
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    if (mutation.error) {
+      if ((mutation.error as AxiosError)?.response?.status === 400) {
+        toast.error("Tên người dùng hoặc mật khẩu không hợp lệ");
+        setLoading(false);
+      }
+    }
     if (mutation.data?.access_token) {
       Cookies.set("auth_token", mutation.data?.access_token);
+      setLoading(false);
       window.location.href = "/home";
     }
   }, [mutation]);
 
   const formSubmit = useCallback(
     (values: FieldValues) => {
+      setLoading(true);
       mutation.mutate({
         username: values.username,
         password: values.password,
@@ -118,7 +129,7 @@ const LoginScreen: React.FC<ILoginScreenProps> = (props) => {
               )}
             </div>
             <div>
-              <Button className="w-full" type="primary">
+              <Button loading={loading} className="w-full" type="primary">
                 Đăng nhập
               </Button>
             </div>

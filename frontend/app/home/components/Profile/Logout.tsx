@@ -2,7 +2,9 @@ import Button from "@/app/components/Button";
 import RsIcon from "@/app/components/Icon";
 import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
-import { Dispatch, Fragment, SetStateAction } from "react";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import { Dispatch, Fragment, SetStateAction, useCallback } from "react";
 
 interface ILogoutFormProps {
   modalOpen: boolean;
@@ -13,6 +15,13 @@ const LogoutForm: React.FC<ILogoutFormProps> = ({
   modalOpen,
   setModalOpen,
 }) => {
+  const router = useRouter();
+
+  const handleLogout = useCallback(() => {
+    Cookies.remove("auth_token");
+    router.replace("/");
+  }, []);
+
   return (
     <Transition appear show={modalOpen} as={Fragment}>
       <Dialog
@@ -62,7 +71,9 @@ const LogoutForm: React.FC<ILogoutFormProps> = ({
                     </svg>
                   </div>
                   <div>
-                    <p className="font-bold text-lg text-independence text-center w-7/12 mx-auto">Bạn có chắc muốn đăng xuất ra khỏi ứng dụng</p>
+                    <p className="font-bold text-lg text-independence text-center w-7/12 mx-auto">
+                      Bạn có chắc muốn đăng xuất ra khỏi ứng dụng
+                    </p>
                   </div>
                 </div>
                 <div className="p-4 flex w-full">
@@ -76,7 +87,7 @@ const LogoutForm: React.FC<ILogoutFormProps> = ({
                     </Button>
                     <Button
                       className="bg-[#F05252] w-1/2"
-                      onClick={() => setModalOpen(false)}
+                      onClick={handleLogout}
                       type="primary"
                     >
                       Xác nhận

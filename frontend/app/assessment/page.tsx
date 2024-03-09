@@ -12,7 +12,8 @@ export default function SpeechToTextComponent() {
   const speechConfig = useRef<sdk.SpeechConfig>();
   const audioConfig = useRef<sdk.AudioConfig>();
   const recognizer = useRef<sdk.SpeechRecognizer>();
-
+  const recorder = useRef<MediaRecorder>();
+  const audioStrem = useRef<MediaStream>();
   const [myTranscript, setMyTranscript] = useState("");
   const [recognizingTranscript, setRecTranscript] = useState("");
 
@@ -122,17 +123,63 @@ export default function SpeechToTextComponent() {
     );
   };
 
+  const handleRecordAudio = () => {
+    const constraints = {
+      audio: {
+        sampleRate: 16000,
+        channelCount: 1,
+      },
+    };
+    navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+      const audioChunks: Blob[] = [];
+      audioStrem.current = stream;
+      recorder.current = new MediaRecorder(stream);
+      recorder.current.addEventListener("dataavailable", (event) => {
+        audioChunks.push(event.data);
+      });
+      (recorder.current as MediaRecorder).addEventListener("stop", () => {
+        console.log(123322);
+        const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+
+        const audioUrl = URL.createObjectURL(audioBlob);
+
+        console.log("test: ", audioUrl);
+        console.log(audioBlob.type);
+        const audio = new Audio(audioUrl);
+        audio.play();
+      });
+    });
+  };
+
+  function stopRecording() {
+    (recorder.current as MediaRecorder).stop();
+    (audioStrem.current as MediaStream)
+      .getTracks()
+      .forEach((track) => track.stop());
+    // startButton.disabled = false;
+    // stopButton.disabled = true;
+    // downloadLink.href = createDownloadURL();
+  }
+
+  // function handleDataAvailable(event) {
+  //   if (event.data.size > 0) {
+  //     recordedChunks.push(event.data);
+  //   }
+
   return (
-    <div>
-      <button onClick={pauseListening}>Pause Listening</button>
-      <button onClick={resumeListening}>Resume Listening</button>
-      <button onClick={stopListening}>Stop Listening</button>
-
-      <div>
-        <div>Recognizing Transcript : {recognizingTranscript}</div>
-
-        <div>RecognizedTranscript : {myTranscript}</div>
+    <div className="flex flex-col gap-5">
+      <div className="flex flex-col items-center gap-10">
+        <button onClick={pauseListening}>Pause Listening</button>
+        <button onClick={resumeListening}>Resume Listening</button>
+        <button onClick={stopListening}>Stop Listening</button>
+        <div>
+          <div>Recognizing Transcript : {recognizingTranscript}</div>
+          <div>RecognizedTranscript : {myTranscript}</div>
+        </div>
       </div>
+      <div>Record with audio:</div>
+      <button onClick={handleRecordAudio}>Start record</button>
+      <button onClick={stopRecording}>Stop record</button>
     </div>
   );
 }

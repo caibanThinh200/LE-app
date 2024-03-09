@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -38,6 +39,11 @@ export class AuthController {
   @Get('check-user')
   checkUser(@Headers() headers) {
     return this.authService.checkUser(headers);
+  }
+
+  @Get('check-exist')
+  checkUserExist(@Query() user) {
+    return this.authService.checkUserExist(user);
   }
 
   @UseGuards(AuthGuard)

@@ -69,10 +69,10 @@ const Header: React.FC<IHeaderProps> = (props) => {
             {/* <button className="py-2.5 px-5 border border-primary-green text-primary-green rounded-full hover:bg-primary-green hover:text-white transition-all duration-300">
               Đăng nhập
             </button> */}
-            <Link href={"/register"}>
+            <Link href={pathname === "/register" ? "/login" : "/register"}>
               <button className="group rounded-full border-2 text-independence hover:border-primary-green transition-all hover:bg-primary-gradient hover:bg-clip-text hover:text-transparent  font-bold border-independence px-8 py-3 flex gap-2 items-center">
                 {/* Tải trên điện thoại */}
-                Đăng ký tài khoản
+                {pathname === "/register" ? "Đăng nhập" : "Đăng ký tài khoản"}
                 {/* <Image
                 src={"/svg/mobile-icon.svg"}
                 width={24}

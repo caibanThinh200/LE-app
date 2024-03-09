@@ -6,7 +6,7 @@ const Pending: React.FC<ILessonCardProps> = (props) => {
   return (
     <div
       key={props.index}
-      className="rounded-xl text-independence border border-bright-gray p-6 relative overflow-hidden"
+      className="rounded-xl text-independence border border-bright-gray p-6 relative overflow-hidden max-h-[400px]"
     >
       <div className="flex relative z-30">
         <div className="flex-2 flex flex-col gap-8">
@@ -49,11 +49,11 @@ const Pending: React.FC<ILessonCardProps> = (props) => {
       <div className="absolute inset-0 w-[70%] h-full z-10 from-white from-[70%] bg-gradient-to-r"></div>
       <div className="absolute inset-0 w-full h-full">
         <Image
-          className="w-full h-full object-cover object-center"
+          className="w-1/2 ml-auto object-cover object-left lg:h-full"
           src={props.section.logo?.fileName as string}
           alt={props.section.logo?.fileName as string}
-          width={100}
-          height={100}
+          width={500}
+          height={500}
         />
       </div>
     </div>

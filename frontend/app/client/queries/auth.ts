@@ -25,10 +25,20 @@ const CheckUser = () => {
   return result;
 };
 
+const CheckUserExist = (user: IUserDto) => {
+  const result = useQuery({
+    queryKey: ["check-exist"],
+    queryFn: () => AuthService.checkUserExist(user),
+    retry: false,
+  });
+  return result;
+};
+
 const AuthQuery = {
   Register,
   Login,
   CheckUser,
+  CheckUserExist,
 };
 
 export default AuthQuery;

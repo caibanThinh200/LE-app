@@ -10,7 +10,8 @@ export interface IButtonProps extends HTMLProps<HTMLButtonElement> {
   children: React.ReactNode;
   className?: string;
   href?: string;
-  buttonType?: "submit" | "reset" | "button"
+  buttonType?: "submit" | "reset" | "button";
+  loading?: boolean;
   //   onClick?: (e: React.ChangeEvent<HTMLButtonElement>) => void;
 }
 

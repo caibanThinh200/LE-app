@@ -85,21 +85,47 @@ export class UserService {
     return user;
   }
 
+  async checkExist(user: User) {
+    const { phoneNumber, username, type } = user;
+    const duplicate = await (this[type] as Model<Student>).findOne({
+      $or: [
+        {
+          'info.username': username,
+          'info.phoneNumber': phoneNumber,
+        },
+      ],
+    });
+
+    if (duplicate) {
+      throw new HttpException(
+        {
+          status: HttpStatus.CONFLICT,
+          error: 'User existed',
+        },
+        HttpStatus.CONFLICT,
+      );
+    }
+    return {
+      status: 200,
+      message: 'Can register this username and phone number',
+    };
+  }
+
   async findByUsername(username, type) {
     const user = await (
       getRepoByType(type, this.student) || this.student
     ).findOne({
       'info.username': username,
     });
-    if (!user) {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: 'No user found',
-        },
-        HttpStatus.NOT_FOUND,
-      );
-    }
+    // if (!user) {
+    //   throw new HttpException(
+    //     {
+    //       status: HttpStatus.NOT_FOUND,
+    //       error: 'No user found',
+    //     },
+    //     HttpStatus.NOT_FOUND,
+    //   );
+    // }
     return user;
   }
 

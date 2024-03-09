@@ -60,11 +60,11 @@ const Completed: React.FC<ILessonCardProps> = (props) => {
       <div className="absolute inset-0 w-[70%] h-full z-10 from-white from-[70%] bg-gradient-to-r"></div>
       <div className="absolute inset-0 w-full h-full">
         <Image
-          className="w-full h-full object-cover object-center"
+          className="w-1/2 ml-auto lg:h-[250px] object-cover object-left"
           src={props.section.logo?.fileName as string}
           alt={props.section.logo?.fileName as string}
-          width={300}
-          height={300}
+          width={500}
+          height={500}
         />
       </div>
     </div>

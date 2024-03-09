@@ -4,8 +4,12 @@ import { Dispatch, SetStateAction, useCallback } from "react";
 import { FieldValues, UseFormReturn, useForm } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 import Button from "../../Button";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { usePathname, useRouter } from "next/navigation";
+import AuthQuery from "@/app/client/queries/auth";
+import AuthService from "@/app/client/api/auth";
+import { IUserDto } from "@/app/interface/modules/user";
+import { toast } from "react-hot-toast";
 
 interface IUserInfoProps {
   form: UseFormReturn<FieldValues, any, undefined>;
@@ -22,15 +26,46 @@ const UserInfo: React.FC<IUserInfoProps> = (props) => {
   } = useForm();
   const router = useRouter();
   const pathname = usePathname();
+  // const {data} = AuthQuery.CheckUserExist()
 
   const formSubmit = useCallback(
-    (values: FieldValues) => {
-      axios.post("/api/sms", { phone: values?.phoneNumber }).then(() => {
-        props.setRegisterInfo({
-          ...values,
-        });
-        router.push(`${pathname}?step=${2}`);
+    async (values: FieldValues) => {
+      const exist = await AuthService.checkUserExist({
+        ...values,
+        type: "student",
+      }).catch((e) => {
+        return e;
       });
+      //5ef59397084a4e69aa523d268c4c50d6
+      if (exist.data?.status === 200) {
+        axios
+          .post(
+            "https://api.budgetsms.net/sendsms",
+            {
+              to: values?.phoneNumber,
+              handle: "5ef59397084a4e69aa523d268c4c50d6",
+              message: "Your OTP code is: 123456",
+              username: "thinhdev",
+              userid: "25818",
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+              },
+            }
+          )
+          .then(() => {
+            props.setRegisterInfo({
+              ...values,
+            });
+            router.push(`${pathname}?step=${2}`);
+          });
+      } else {
+        if ((exist as AxiosError)?.response?.status === 409) {
+          toast.error("Tên người dùng hoặc số điện thoại đã được sử dụng");
+        }
+      }
     },
     [props]
   );

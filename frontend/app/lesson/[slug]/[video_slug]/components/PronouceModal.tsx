@@ -86,7 +86,7 @@ const Pronounce: React.FC<IPronounceProps> = ({
       sdk.SpeechConfig.fromSubscription(SPEECH_KEY, SPEECH_REGION);
     (speechConfig.current as sdk.SpeechConfig).speechRecognitionLanguage =
       "en-US";
-    audioConfig.current = sdk.AudioConfig.fromDefaultMicrophoneInput();
+    audioConfig.current = sdk.AudioConfig.fromMicrophoneInput();
     (recognizer.current as sdk.SpeechRecognizer) = new sdk.SpeechRecognizer(
       speechConfig.current as sdk.SpeechConfig,
       audioConfig.current
@@ -105,6 +105,14 @@ const Pronounce: React.FC<IPronounceProps> = ({
         recognizer.current as sdk.SpeechRecognizer
       );
     }
+    // (recognizer.current as sdk.SpeechRecognizer)?.recognizeOnceAsync(function (
+    //   successfulResult
+    // ) {
+    //   let pronunciation_result =
+    //     sdk.PronunciationAssessmentResult.fromResult(successfulResult);
+    //   // console.log(pronunciation_result);
+    //   // onRecognizedResult(successfulResult);
+    // });
     // handleOpenMic();
     return () => {
       (
@@ -162,6 +170,9 @@ const Pronounce: React.FC<IPronounceProps> = ({
     event: sdk.SpeechRecognitionEventArgs
   ) => {
     const result = event.result;
+    let pronunciation_result =
+      sdk.PronunciationAssessmentResult.fromResult(result);
+    console.log(pronunciation_result);
     onRecognizedResult(result);
   };
 
@@ -176,16 +187,61 @@ const Pronounce: React.FC<IPronounceProps> = ({
   const handleOpenMic = () => {
     startRecordingAudio.play();
     setAnimationLoading(true);
-    (recognizer.current as sdk.SpeechRecognizer)?.recognizeOnceAsync(function (
-      successfulResult
-    ) {
-      onRecognizedResult(successfulResult);
-    });
+    // (recognizer.current as sdk.SpeechRecognizer)?.recognizeOnceAsync(function (
+    //   successfulResult
+    // ) {
+    //   let pronunciation_result =
+    //     sdk.PronunciationAssessmentResult.fromResult(successfulResult);
+    //   console.log(pronunciation_result);
+    //   onRecognizedResult(successfulResult);
+    // });
+    (
+      recognizer.current as sdk.SpeechRecognizer
+    ).startContinuousRecognitionAsync();
     (recognizer.current as sdk.SpeechRecognizer).recognized = (s, e) =>
-      processRecognizedTranscript(e);
-    (recognizer.current as sdk.SpeechRecognizer).recognizing = (s, e) =>
-      processRecognizingTranscript(e);
-
+      // processRecognizedTranscript(e);
+      {
+        let pronunciation_result = sdk.PronunciationAssessmentResult.fromResult(
+          e.result
+        );
+        console.log(pronunciation_result);
+        setPronouciationScore({
+          accuracy: pronunciation_result.accuracyScore,
+          pronunciation: pronunciation_result.pronunciationScore,
+          completeness: pronunciation_result.completenessScore,
+          fluency: pronunciation_result.fluencyScore,
+          prodosy: pronunciation_result.prosodyScore,
+        });
+        setCurrentPronounce({
+          ...currentPronounce,
+          pronouceParagraph: e.result.text,
+          score: {
+            accuracy: pronunciation_result.accuracyScore,
+            pronunciation: pronunciation_result.pronunciationScore,
+            completeness: pronunciation_result.completenessScore,
+            fluency: pronunciation_result.fluencyScore,
+            average:
+              Object.keys(
+                pronunciation_result.detailResult.PronunciationAssessment
+              ).reduce(
+                (prev, current) =>
+                  prev +
+                  pronunciation_result.detailResult.PronunciationAssessment[
+                    current as "AccuracyScore"
+                  ],
+                0
+              ) /
+              Object.keys(
+                pronunciation_result.detailResult.PronunciationAssessment
+              ).length,
+          },
+        });
+        setWordDetail(pronunciation_result.detailResult.Words);
+        setHasResult(true);
+        setAnimationLoading(false);
+        stopListening();
+      };
+    //  (recognizer.current as sdk.SpeechRecognizer).recognized
     (
       recognizer.current as sdk.SpeechRecognizer
     ).startContinuousRecognitionAsync(() => {
@@ -277,11 +333,16 @@ const Pronounce: React.FC<IPronounceProps> = ({
     setPronouciationScore(initialScore);
   };
 
+  const pronoucedWord =
+    wordDetail?.length / currentPronounce?.paragraph?.split(" ")?.length + 0.2;
+
   const averageScore =
-    Object.keys(pronouciationScore).reduce(
+    (Object.keys(pronouciationScore).reduce(
       (prev, current) => prev + pronouciationScore[current as "accuracy"],
       0
-    ) / Object.keys(pronouciationScore).length;
+    ) /
+      Object.keys(pronouciationScore).length) *
+    pronoucedWord;
 
   const averageData = {
     labels: ["Total"],

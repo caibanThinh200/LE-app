@@ -33,37 +33,16 @@ export class AuthService {
     } else {
       throw new HttpException(
         {
-          status: HttpStatus.NOT_FOUND,
+          status: HttpStatus.BAD_REQUEST,
           error: 'User or password is invalid',
         },
-        HttpStatus.NOT_FOUND,
+        HttpStatus.BAD_REQUEST,
       );
     }
   }
 
   async checkUserExist(user: User) {
-    const { phoneNumber, username } = user;
-    const duplicate = await (
-      this[(user as User).type] as Model<Student>
-    ).findOne({
-      $or: [
-        {
-          'info.username': username,
-          'info.phoneNumber': phoneNumber,
-        },
-      ],
-    });
-
-    if (duplicate) {
-      throw new HttpException(
-        {
-          status: HttpStatus.CONFLICT,
-          error: 'User existed',
-        },
-        HttpStatus.CONFLICT,
-      );
-    }
-    return true;
+    return this.usersService.checkExist(user);
   }
 
   async register(user: User) {
