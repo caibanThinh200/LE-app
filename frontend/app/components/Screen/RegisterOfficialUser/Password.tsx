@@ -38,18 +38,20 @@ const Password: React.FC<IPasswordProps> = (props) => {
   });
   const pathname = usePathname();
   const [isSuccess, setIsSuccess] = useState(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // if (
-    //   ((mutation.error as AxiosError)?.response?.data as any)?.status === 409
-    // ) {
-    //   toast.error("Tên người dùng hoặc số điện thoại đã được sử dụng");
-    // }
+    if (mutation.error) {
+      setLoading(false);
+      console.log(mutation.error);
+    }
+    setLoading(!!mutation.data);
     setIsSuccess(!!mutation.data);
   }, [mutation]);
 
   const formSubmit = useCallback(
     (values: FieldValues) => {
+      setLoading(true);
       const registerInfo = {
         ...props.userInfo,
         ...values,
@@ -132,7 +134,7 @@ const Password: React.FC<IPasswordProps> = (props) => {
               )}
             </div>
             <div>
-              <Button className="w-full" type="primary">
+              <Button loading={loading} className="w-full" type="primary">
                 Tiếp tục
               </Button>
             </div>

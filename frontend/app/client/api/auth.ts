@@ -3,9 +3,15 @@ import { IUserDto } from "@/app/interface/modules/user";
 import axiosClient from "@/app/util/axiosClient";
 
 const register = async (body: IUserDto) => {
-  const result = await axiosClient.post("/auth/register", {
-    ...body,
-  });
+  const result = await axiosClient.post(
+    "/auth/register",
+    {
+      ...body,
+    },
+    {
+      timeout: 4000,
+    }
+  );
   return result.data;
 };
 
