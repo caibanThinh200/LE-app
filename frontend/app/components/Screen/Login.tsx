@@ -38,8 +38,9 @@ const LoginScreen: React.FC<ILoginScreenProps> = (props) => {
     }
     if (mutation.data?.access_token) {
       Cookies.set("auth_token", mutation.data?.access_token);
+      Cookies.remove("draft");
       setLoading(false);
-      window.location.href = "/home";
+      router.push("/home");
     }
   }, [mutation]);
 

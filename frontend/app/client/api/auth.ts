@@ -26,11 +26,17 @@ const checkUserExist = async (user: IUserDto) => {
   return result;
 };
 
+const getUserProfile = async () => {
+  const user = await axiosClient.get("/auth/profile");
+  return user;
+};
+
 const AuthService = {
   register,
   login,
   checkUser,
   checkUserExist,
+  getUserProfile,
 };
 
 export default AuthService;

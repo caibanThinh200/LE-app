@@ -5,6 +5,9 @@ import LeftBar from "./components/LeftBar";
 import VideoAssessment, { Pronouce } from "./components/Video";
 import { useServerContext } from "@/app/client/context";
 import AssessmentQuery from "@/app/client/queries/assessment";
+import { ILessonDto } from "@/app/interface/modules/lesson";
+import LoadingOverlay from "@/app/components/LoadingOverlay";
+import { IAssessmentDto } from "@/app/interface/modules/aessment";
 
 const pronounces = [
   {
@@ -28,6 +31,10 @@ const Video = ({
 }) => {
   const [listPronounce, setListPronounce] = useState<Pronouce[]>([]);
   const { data } = AssessmentQuery.GetDetailAssessment(params.video_slug);
+
+  if (!data) {
+    return <LoadingOverlay />;
+  }
 
   return (
     <div className="container mx-auto py-4 max-w-[1440px]">

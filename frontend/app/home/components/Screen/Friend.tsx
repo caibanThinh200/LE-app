@@ -3,15 +3,19 @@
 import Button from "@/app/components/Button";
 import FriendCard from "../FriendCard";
 import SearchBar from "../SearchBar";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import RsIcon from "@/app/components/Icon";
 import Image from "next/image";
+import { IStudentDto } from "@/app/interface/modules/student";
+import StudentQuery from "@/app/client/queries/student";
 
 interface IFriendScreenProps {}
 
 const FriendScreen: React.FC<IFriendScreenProps> = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [suggestFriend, setSuggestFriend] = useState<IStudentDto[]>([]);
+  const { data } = StudentQuery.GetSuggestFriend();
 
   return (
     <div className="p-6 overflow-auto h-screen scroll-hover">
@@ -80,59 +84,41 @@ const FriendScreen: React.FC<IFriendScreenProps> = (props) => {
                           />
                         </div>
                         <div className="flex flex-col gap-6 mt-6">
-                          <div className=" flex justify-between">
-                            <div className="flex gap-2 items-center">
-                              <div>
-                                <Image
-                                  src={"/images/avatar.png"}
-                                  width={44}
-                                  height={44}
-                                  alt="test"
-                                />
+                          {data?.map((student) => (
+                            <div
+                              key={student._id}
+                              className=" flex justify-between"
+                            >
+                              <div className="flex gap-2 items-center">
+                                <div>
+                                  <Image
+                                    src={"/images/avatar.png"}
+                                    width={44}
+                                    height={44}
+                                    alt="test"
+                                  />
+                                </div>
+                                <div>
+                                  <p className="font-bold text-sm">
+                                    {student.info?.name}
+                                  </p>
+                                  <p className="text-xs">
+                                    {student?.info?.phoneNumber}
+                                  </p>
+                                </div>
                               </div>
                               <div>
-                                <p className="font-bold text-sm">
-                                  Thịnh Nguyễn
-                                </p>
-                                <p className="text-xs">888888843132</p>
+                                <Button
+                                  type="secondary"
+                                  className="border-auro-metal-saurus flex items-center gap-2 py-2 px-6"
+                                >
+                                  <RsIcon type="plus" /> Thêm
+                                </Button>
                               </div>
                             </div>
-                            <div>
-                              <Button
-                                type="secondary"
-                                className="border-auro-metal-saurus flex items-center gap-2 py-2 px-6"
-                              >
-                                <RsIcon type="plus" /> Thêm
-                              </Button>
-                            </div>
-                          </div>
-                          <div className=" flex justify-between">
-                            <div className="flex gap-2 items-center">
-                              <div>
-                                <Image
-                                  src={"/images/avatar.png"}
-                                  width={44}
-                                  height={44}
-                                  alt="test"
-                                />
-                              </div>
-                              <div>
-                                <p className="font-bold text-sm">
-                                  Thịnh Nguyễn
-                                </p>
-                                <p className="text-xs">888888843132</p>
-                              </div>
-                            </div>
-                            <div>
-                              <Button
-                                type="secondary"
-                                className="border-auro-metal-saurus flex items-center gap-2 py-2 px-6"
-                              >
-                                <RsIcon type="plus" /> Thêm
-                              </Button>
-                            </div>
-                          </div>
-                          <div className=" flex justify-between">
+                          ))}
+
+                          {/* <div className=" flex justify-between">
                             <div className="flex gap-2 items-center">
                               <div>
                                 <Image
@@ -157,7 +143,7 @@ const FriendScreen: React.FC<IFriendScreenProps> = (props) => {
                                 <RsIcon type="minus" /> Bỏ thêm
                               </Button>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>

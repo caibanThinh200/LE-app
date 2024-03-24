@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   const accountSid = process.env.TWILIO_ACCOUNT_SID;
   const authToken = process.env.TWILIO_AUTH_TOKEN;
   const client = twilio(accountSid, authToken);
-  console.log(accountSid, authToken);
+
   const formattedPhoneNumber =
     req?.phone?.charAt(0) !== "+"
       ? req?.phone?.replace(/^.{1}/g, "+84")

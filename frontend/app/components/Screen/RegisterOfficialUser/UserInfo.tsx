@@ -38,29 +38,36 @@ const UserInfo: React.FC<IUserInfoProps> = (props) => {
       });
       //5ef59397084a4e69aa523d268c4c50d6
       if (exist.data?.status === 200) {
-        axios
-          .post(
-            "https://api.budgetsms.net/sendsms",
-            {
-              to: values?.phoneNumber,
-              handle: "5ef59397084a4e69aa523d268c4c50d6",
-              message: "Your OTP code is: 123456",
-              username: "thinhdev",
-              userid: "25818",
-            },
-            {
-              headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
-              },
-            }
-          )
-          .then(() => {
-            props.setRegisterInfo({
-              ...values,
-            });
-            router.push(`${pathname}?step=${2}`);
-          });
+        // axios
+        //   .post(
+        //     "https://api.budgetsms.net/sendsms",
+        //     {
+        //       to: values?.phoneNumber,
+        //       handle: "5ef59397084a4e69aa523d268c4c50d6",
+        //       message: "Your OTP code is: 123456",
+        //       username: "thinhdev",
+        //       userid: "25818",
+        //     },
+        //     {
+        //       headers: {
+        //         "Content-Type": "application/json",
+        //         "Access-Control-Allow-Origin": "*",
+        //       },
+        //     }
+        //   )
+        //   .then(() => {
+        //     props.setRegisterInfo({
+        //       ...values,
+        //     });
+        //     router.push(`${pathname}?step=${2}`);
+        //   });
+        // axios.post("/api/sms", {
+        //   phone: values?.phoneNumber,
+        // });
+        props.setRegisterInfo({
+          ...values,
+        });
+        router.push(`${pathname}?step=${3}`);
       } else {
         if ((exist as AxiosError)?.response?.status === 409) {
           toast.error("Tên người dùng hoặc số điện thoại đã được sử dụng");

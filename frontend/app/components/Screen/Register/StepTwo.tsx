@@ -19,14 +19,11 @@ interface IRegisterstepTwoProps {
 }
 
 const StepTwo: React.FC<IRegisterstepTwoProps> = (props) => {
-  const [name, setName] = useState<string>("");
   const router = useRouter();
 
   const handleSelectClass = useCallback(
-    (e: React.MouseEvent) => {
-      // setName(e.target.value);
-      router.push("/home");
-      // return props.onUpdate({ class: "" });
+    (grade: number) => {
+      return props.onUpdate({ class: grade });
     },
     [router]
   );
@@ -42,7 +39,7 @@ const StepTwo: React.FC<IRegisterstepTwoProps> = (props) => {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <Button
-              onClick={handleSelectClass}
+              onClick={() => handleSelectClass(1)}
               className="hover:text-primary-green w-full bg-ghost-white text-independence drop-shadow-md rounded-xl"
               type="primary"
             >
@@ -51,7 +48,7 @@ const StepTwo: React.FC<IRegisterstepTwoProps> = (props) => {
           </div>
           <div>
             <Button
-              onClick={handleSelectClass}
+              onClick={() => handleSelectClass(2)}
               className="hover:text-primary-green w-full bg-ghost-white text-independence drop-shadow-md rounded-xl"
               type="primary"
             >
@@ -60,7 +57,7 @@ const StepTwo: React.FC<IRegisterstepTwoProps> = (props) => {
           </div>
           <div>
             <Button
-              onClick={handleSelectClass}
+              onClick={() => handleSelectClass(3)}
               className="hover:text-primary-green w-full bg-ghost-white text-independence drop-shadow-md rounded-xl"
               type="primary"
             >
@@ -69,7 +66,7 @@ const StepTwo: React.FC<IRegisterstepTwoProps> = (props) => {
           </div>
           <div>
             <Button
-              onClick={handleSelectClass}
+              onClick={() => handleSelectClass(4)}
               className="hover:text-primary-green w-full bg-ghost-white text-independence drop-shadow-md rounded-xl"
               type="primary"
             >

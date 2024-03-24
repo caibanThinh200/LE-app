@@ -8,6 +8,7 @@ import LessonQuery from "@/app/client/queries/lesson";
 import { useServerContext } from "@/app/client/context";
 import { ILessonDto } from "@/app/interface/modules/lesson";
 import { IAssessmentDto } from "@/app/interface/modules/aessment";
+import LoadingOverlay from "@/app/components/LoadingOverlay";
 
 export type IAssessmentOfLesson = IAssessmentDto & {
   active: boolean;
@@ -47,6 +48,13 @@ const DetailLesson = ({ params }: { params: { slug: string } }) => {
     () => (assessments || []).find((a) => a.active),
     [assessments]
   );
+
+  if (
+    ((data as ILessonDto[]) || []).length === 0 ||
+    (assessments || []).length === 0
+  ) {
+    return <LoadingOverlay />;
+  }
 
   return (
     <div className="container mx-auto h-[88%] max-w-[1440px]">

@@ -9,8 +9,12 @@ import ChangePasswordForm from "./ChangePassword";
 import EditProfileForm from "./EditProfile";
 import LogoutForm from "./Logout";
 import AvatarUpload from "./Avatar";
+import { IStudentDto } from "@/app/interface/modules/student";
+import { toast } from "react-hot-toast";
 
-interface IPersonalInfoProps {}
+interface IPersonalInfoProps {
+  result: IStudentDto;
+}
 
 const PersonalInfo: React.FC<IPersonalInfoProps> = (props) => {
   const [changePasswordModal, setChangePasswordModal] = useState(false);
@@ -39,21 +43,30 @@ const PersonalInfo: React.FC<IPersonalInfoProps> = (props) => {
           </div>
           <div>
             <p className="text-independence font-bold text-xl text-center">
-              Thế Vinh
+              {props.result?.info?.name}
             </p>
             <p className="flex gap-2 items-center">
               <RsIcon type="medal-1" />
               <span className="text-yellow-600">Không có đối thủ</span>
             </p>
           </div>
-          <p>Lớp 12</p>
+          <p>Lớp {props.result?.class}</p>
         </div>
         <div className="flex flex-col gap-2">
           <div className="p-3 bg-anti-flash-white flex justify-between rounded-xl">
             <p className="text-auro-metal-saurus">Số điện thoại</p>
             <div className="flex gap-2">
-              0858543232
-              <RsIcon className="cursor-pointer" type="copy" />
+              {props?.result?.info?.phoneNumber}
+              <RsIcon
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    props.result?.info?.phoneNumber as string
+                  );
+                  toast.success("Đã copy số điện thoại !");
+                }}
+                className="cursor-pointer"
+                type="copy"
+              />
               <RsIcon
                 className="cursor-pointer"
                 type="edit-pencil"

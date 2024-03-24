@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UseGuards,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Student } from 'schemas/student.schema';
@@ -142,4 +147,7 @@ export class UserService {
     }
     return user.updateOne(updateUser);
   }
+
+  // @UseGuards(AuthGuard)
+  async addFriendStudent(id: string) {}
 }

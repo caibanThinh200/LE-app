@@ -12,6 +12,7 @@ import { QuestModule } from './quest/quest.module';
 import { PronouceScoreModule } from './pronouce-score/pronouce-score.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { StudentModule } from './student/student.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { join } from 'path';
     AssessmentModule,
     QuestModule,
     PronouceScoreModule,
+    StudentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

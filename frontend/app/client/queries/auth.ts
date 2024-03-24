@@ -34,11 +34,21 @@ const CheckUserExist = (user: IUserDto) => {
   return result;
 };
 
+const GetUserProfile = () => {
+  const result = useQuery({
+    queryKey: ["get-profile"],
+    queryFn: () => AuthService.getUserProfile(),
+    retry: false,
+  });
+  return result;
+};
+
 const AuthQuery = {
   Register,
   Login,
   CheckUser,
   CheckUserExist,
+  GetUserProfile,
 };
 
 export default AuthQuery;

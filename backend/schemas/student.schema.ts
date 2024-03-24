@@ -20,6 +20,15 @@ export class Student extends mongoose.Document {
 
   @Prop({ type: Number })
   code: number;
+
+  @Prop([{ type: mongoose.Types.ObjectId, ref: 'Student' }])
+  friends: Student[];
+
+  @Prop([{ type: mongoose.Types.ObjectId, ref: 'Student' }])
+  pending: Student[];
+
+  @Prop([{ type: mongoose.Types.ObjectId, ref: 'Student' }])
+  request: Student[];
 }
 
 export const StudentSchema = SchemaFactory.createForClass(Student);

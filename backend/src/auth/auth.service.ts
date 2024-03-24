@@ -8,8 +8,6 @@ import { UserService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { User } from 'schemas/user.schema';
-import { Model } from 'mongoose';
-import { Student } from 'schemas/student.schema';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +22,11 @@ export class AuthService {
       loginUser.type,
     );
     if (user && bcrypt.compareSync(loginUser.password, user?.info?.password)) {
-      const payload = { sub: user.id, username: user?.info?.username };
+      const payload = {
+        id: user.id,
+        username: user?.info?.username,
+        type: user?.info?.type || 'student',
+      };
       return {
         access_token: await this.jwtService.signAsync(payload, {
           secret: process.env.JWT_SECRET_TOKEN,
@@ -61,6 +63,11 @@ export class AuthService {
     return this.usersService.create(createUserDto);
   }
 
+  async getUserProfile(user: User) {
+    const currentUser = await this.usersService.findOne(user?.id, user?.type);
+    return currentUser;
+  }
+
   async checkUser(headers: Headers) {
     const token = headers['authorization']?.replace('Bearer ', '');
 
@@ -78,7 +85,7 @@ export class AuthService {
         );
       });
     const checkUser = this.usersService.findOne(
-      checkToken?.sub || '',
+      checkToken?.id || '',
       'student',
     );
     if (!checkUser) {

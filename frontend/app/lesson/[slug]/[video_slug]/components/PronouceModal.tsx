@@ -20,6 +20,8 @@ import { Doughnut } from "react-chartjs-2";
 import { Tooltip } from "react-tooltip";
 import Lottie from "lottie-react";
 import * as loading from "../../../../../public/lottie/loading-2.json";
+import * as correct from "../../../../../public/lottie/pronouce-success.json";
+import * as incorrect from "../../../../../public/lottie/prnouce-failed.json";
 import { twMerge } from "tailwind-merge";
 
 interface IPronounceProps {
@@ -425,24 +427,26 @@ const Pronounce: React.FC<IPronounceProps> = ({
                   {averageScore > 50 ? (
                     <div className="flex gap-0 items-center justify-center">
                       <p className="text-xl"> Tốt lắm</p>
-                      <Image
+                      {/* <Image
                         src={"/images/success.png"}
                         className="w-[100px] h-[80px]"
                         alt="success"
                         width={200}
                         height={200}
-                      />
+                      /> */}
+                      <Lottie animationData={correct} className="w-[100px] h-[80px]" loop={false} />
                     </div>
                   ) : (
                     <div className="flex gap-0 items-center justify-center">
                       <p>Bạn cần cố gắng thêm</p>
-                      <Image
+                      {/* <Image
                         src={"/images/failed.png"}
                         className="w-[100px] h-[80px]"
                         alt="success"
                         width={200}
                         height={200}
-                      />
+                      /> */}
+                      <Lottie animationData={incorrect} className="w-[100px] h-[80px]" loop={false} />
                     </div>
                   )}
                 </p>
