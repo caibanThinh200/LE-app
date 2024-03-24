@@ -51,15 +51,15 @@ export class UserService {
       ],
     });
 
-    if (duplicate) {
-      throw new HttpException(
-        {
-          status: HttpStatus.CONFLICT,
-          error: 'User existed',
-        },
-        HttpStatus.CONFLICT,
-      );
-    }
+    // if (duplicate) {
+    //   throw new HttpException(
+    //     {
+    //       status: HttpStatus.CONFLICT,
+    //       error: 'User existed',
+    //     },
+    //     HttpStatus.CONFLICT,
+    //   );
+    // }
 
     const createdUser = userTypes[(createUserDto as User)?.type];
     return createdUser.save();
